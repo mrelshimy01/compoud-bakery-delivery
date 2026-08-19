@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>MoharamBake Delivery</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="loginScreen" class="screen login-screen">
+    <div class="login-card">
+      <div class="brand-icon">🥖</div>
+      <h1>MoharamBake</h1>
+      <p class="subtitle">Delivery</p>
+      <form id="loginForm">
+        <label for="username">Delivery Man</label>
+        <input id="username" type="text" autocomplete="username" placeholder="Username" required>
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" placeholder="Password" required>
+        <button id="loginButton" class="primary-button" type="submit">Login</button>
+      </form>
+      <div id="loginError" class="error-message"></div>
+    </div>
+  </section>
+
+  <section id="appScreen" class="screen hidden">
+    <header class="topbar">
+      <div>
+        <div class="brand">MoharamBake</div>
+        <div id="userLabel" class="user-label"></div>
+      </div>
+      <button id="logoutButton" class="ghost-button">Logout</button>
+    </header>
+
+    <nav id="mainNav" class="main-nav">
+      <button class="nav-button active" data-view="delivery">🚚 Delivery</button>
+      <button class="nav-button" data-view="supply">🏭 Supply</button>
+    </nav>
+
+    <div class="controls">
+      <button id="refreshButton" class="primary-button">Refresh</button>
+      <div id="lastUpdated" class="last-updated"></div>
+    </div>
+
+    <main id="deliveryView" class="view">
+      <div class="section-heading">
+        <h2>Deliveries</h2>
+        <p id="deliverySummary">Loading...</p>
+      </div>
+      <div id="deliveryOrders" class="building-list"></div>
+    </main>
+
+    <main id="supplyView" class="view hidden">
+      <div class="section-heading">
+        <h2>Supply</h2>
+        <p>Consolidated active orders</p>
+      </div>
+      <div id="supplyList" class="supply-list"></div>
+    </main>
+  </section>
+
+  <div id="loading" class="loading-overlay hidden">
+    <div class="spinner"></div>
+    <span>Loading...</span>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
