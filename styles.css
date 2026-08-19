@@ -1,38 +1,1692 @@
-*{box-sizing:border-box}
-:root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111827;background:#f3f4f6}
-body{margin:0;min-height:100vh;background:#f3f4f6}
-button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.screen{min-height:100vh}
-.login-screen{display:flex;align-items:center;justify-content:center;padding:24px}
-.login-card{width:100%;max-width:400px;background:#fff;border-radius:24px;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,.08)}
-.brand-icon{width:64px;height:64px;display:flex;align-items:center;justify-content:center;border-radius:18px;background:#f3f4f6;font-size:32px;margin-bottom:18px}
-.login-card h1{margin:0;font-size:28px}.subtitle{margin:4px 0 28px;color:#6b7280}
-.login-card label{display:block;margin:16px 0 7px;font-size:14px;font-weight:600}
-.login-card input{width:100%;border:1px solid #d1d5db;border-radius:12px;padding:13px 14px;outline:none}
-.login-card input:focus{border-color:#111827}.primary-button{width:100%;border:0;border-radius:12px;padding:13px 18px;background:#111827;color:#fff;font-weight:700}
-.login-card .primary-button{margin-top:24px}.primary-button:disabled{opacity:.55;cursor:wait}.error-message{color:#b91c1c;margin-top:14px;font-size:14px}
-#appScreen{max-width:1100px;margin:0 auto;padding-bottom:40px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px}
-.brand{font-size:22px;font-weight:800}.user-label{margin-top:3px;color:#6b7280;font-size:14px}
-.ghost-button{border:1px solid #d1d5db;background:#fff;border-radius:10px;padding:9px 13px}
-.main-nav{display:flex;gap:8px;padding:8px 20px}.nav-button{flex:1;border:1px solid #d1d5db;background:#fff;border-radius:12px;padding:12px;font-weight:700}
-.nav-button.active{background:#111827;color:#fff;border-color:#111827}.controls{display:flex;align-items:center;gap:12px;padding:12px 20px 20px}
-.controls .primary-button{width:auto}.last-updated{color:#6b7280;font-size:13px}.view{padding:0 20px}
-.section-heading{margin:8px 0 18px}.section-heading h2{margin:0;font-size:24px}.section-heading p{margin:5px 0 0;color:#6b7280}
-.building-list{display:flex;flex-direction:column;gap:18px}.building-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.05)}
-.building-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;border-bottom:1px solid #e5e7eb}
-.building-title{font-size:19px;font-weight:800}.building-meta{color:#6b7280;font-size:13px;margin-top:4px}.building-total{font-weight:800}
-.apartment-list{padding:12px;display:flex;flex-direction:column;gap:10px}.apartment-card{border:1px solid #e5e7eb;border-radius:14px;overflow:hidden}
-.apartment-header{padding:12px 14px;background:#f9fafb}.apartment-label{color:#6b7280;margin-right:7px;font-size:13px}
-.order-card{padding:16px;border-top:1px solid #e5e7eb}.order-header{display:flex;justify-content:space-between;gap:15px}
-.order-header h3{margin:0 0 5px;font-size:17px}.phone-link{color:#374151;text-decoration:none;font-size:14px}
-.order-total{font-size:17px;font-weight:800;white-space:nowrap}.delivery-info{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}
-.delivery-info span{background:#f3f4f6;border-radius:8px;padding:6px 8px;font-size:12px}.items{border-top:1px solid #f3f4f6;padding-top:10px}
-.item-row{padding:4px 0;font-size:14px}.no-items{color:#9ca3af;font-size:13px}.order-reference{color:#9ca3af;font-size:11px;margin-top:12px}
-.supply-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.05)}
-.supply-header,.supply-row{display:grid;grid-template-columns:1fr 100px}.supply-header{padding:15px 18px;background:#f9fafb;font-size:13px;font-weight:700}
-.supply-row{align-items:center;padding:15px 18px;border-top:1px solid #e5e7eb}.supply-row small{display:block;margin-top:3px;color:#9ca3af}.supply-quantity{text-align:right;font-size:20px}
-.empty-state{text-align:center;background:#fff;border-radius:18px;padding:50px 25px}.empty-icon{font-size:42px}.empty-state h3{margin:15px 0 5px}.empty-state p{color:#6b7280;margin:0}
-.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.75);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;z-index:100}
-.spinner{width:34px;height:34px;border:3px solid #d1d5db;border-top-color:#111827;border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);background:#111827;color:#fff;padding:12px 17px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;z-index:200}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:600px){.topbar{padding:16px 14px 10px}.view{padding:0 14px}.controls{padding:10px 14px 18px}.main-nav{padding:8px 14px}.building-header{padding:15px}.order-card{padding:14px}.login-card{padding:25px}}
+* {
+  box-sizing: border-box;
+}
+
+
+:root {
+
+  --bg:
+    #f4f1ee;
+
+  --surface:
+    #ffffff;
+
+  --surface-soft:
+    #faf7f4;
+
+  --border:
+    #e8e1dc;
+
+  --text:
+    #211b17;
+
+  --muted:
+    #7c7169;
+
+  --dark:
+    #111827;
+
+  --accent:
+    #bd5b34;
+
+  --accent-soft:
+    #f8e9df;
+
+  --success:
+    #2f7d48;
+
+  --success-soft:
+    #e9f6ec;
+
+  --warning:
+    #b7522c;
+
+  --warning-soft:
+    #fff0e8;
+
+}
+
+
+html,
+body {
+
+  margin: 0;
+
+  min-height: 100%;
+
+}
+
+
+body {
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+}
+
+
+button,
+input {
+
+  font:
+    inherit;
+
+}
+
+
+button {
+
+  cursor:
+    pointer;
+
+}
+
+
+.hidden {
+
+  display:
+    none !important;
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-screen {
+
+  min-height:
+    100vh;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    24px;
+
+}
+
+
+.login-card {
+
+  width:
+    min(100%, 430px);
+
+  padding:
+    36px;
+
+  background:
+    var(--surface);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    24px;
+
+  box-shadow:
+    0 18px 50px
+    rgba(
+      35,
+      25,
+      18,
+      0.08
+    );
+
+}
+
+
+.brand-icon {
+
+  width:
+    64px;
+
+  height:
+    64px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  background:
+    var(--accent-soft);
+
+  border-radius:
+    18px;
+
+  font-size:
+    32px;
+
+  margin-bottom:
+    18px;
+
+}
+
+
+.brand-title {
+
+  font-size:
+    30px;
+
+  font-weight:
+    850;
+
+  letter-spacing:
+    -0.7px;
+
+}
+
+
+.brand-subtitle {
+
+  margin-top:
+    3px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    17px;
+
+  margin-bottom:
+    30px;
+
+}
+
+
+.login-card label {
+
+  display:
+    block;
+
+  margin:
+    0 0 8px;
+
+  font-size:
+    13px;
+
+  font-weight:
+    800;
+
+}
+
+
+.login-card input {
+
+  width:
+    100%;
+
+  height:
+    52px;
+
+  padding:
+    0 15px;
+
+  margin-bottom:
+    20px;
+
+  border:
+    1px solid #ddd4cd;
+
+  border-radius:
+    12px;
+
+  outline:
+    none;
+
+  background:
+    #fff;
+
+}
+
+
+.login-card input:focus {
+
+  border-color:
+    var(--accent);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(
+      189,
+      91,
+      52,
+      0.12
+    );
+
+}
+
+
+.primary-button {
+
+  width:
+    100%;
+
+  height:
+    54px;
+
+  border:
+    0;
+
+  border-radius:
+    13px;
+
+  background:
+    var(--dark);
+
+  color:
+    white;
+
+  font-weight:
+    800;
+
+}
+
+
+.primary-button:disabled {
+
+  opacity:
+    0.6;
+
+  cursor:
+    wait;
+
+}
+
+
+.login-error {
+
+  min-height:
+    20px;
+
+  margin-top:
+    12px;
+
+  color:
+    #c52f20;
+
+  font-size:
+    13px;
+
+  font-weight:
+    650;
+
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+#appScreen {
+
+  min-height:
+    100vh;
+
+}
+
+
+.topbar {
+
+  width:
+    min(
+      1180px,
+      calc(100% - 32px)
+    );
+
+  margin:
+    0 auto;
+
+  padding:
+    24px 0 18px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+}
+
+
+.app-brand {
+
+  font-size:
+    25px;
+
+  font-weight:
+    850;
+
+  letter-spacing:
+    -0.5px;
+
+}
+
+
+.user-label {
+
+  margin-top:
+    3px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    13px;
+
+  font-weight:
+    650;
+
+}
+
+
+.user-label.admin-label {
+
+  color:
+    var(--accent);
+
+}
+
+
+.logout-button {
+
+  padding:
+    10px 15px;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    11px;
+
+  font-weight:
+    750;
+
+}
+
+
+.logout-button:hover {
+
+  background:
+    var(--surface-soft);
+
+}
+
+
+/* =========================================================
+   NAV
+========================================================= */
+
+.main-nav {
+
+  width:
+    min(
+      1180px,
+      calc(100% - 32px)
+    );
+
+  margin:
+    0 auto 18px;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    10px;
+
+}
+
+
+.nav-button {
+
+  height:
+    52px;
+
+  border:
+    1px solid #dcd4ce;
+
+  border-radius:
+    14px;
+
+  background:
+    white;
+
+  color:
+    var(--text);
+
+  font-weight:
+    800;
+
+  transition:
+    0.15s ease;
+
+}
+
+
+.nav-button.active {
+
+  background:
+    var(--dark);
+
+  border-color:
+    var(--dark);
+
+  color:
+    white;
+
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.page-controls {
+
+  width:
+    min(
+      1180px,
+      calc(100% - 32px)
+    );
+
+  margin:
+    0 auto 26px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    12px;
+
+}
+
+
+.refresh-button {
+
+  height:
+    44px;
+
+  padding:
+    0 18px;
+
+  border:
+    0;
+
+  border-radius:
+    11px;
+
+  background:
+    var(--dark);
+
+  color:
+    white;
+
+  font-weight:
+    800;
+
+}
+
+
+.last-updated {
+
+  color:
+    var(--muted);
+
+  font-size:
+    12px;
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.view {
+
+  width:
+    min(
+      1180px,
+      calc(100% - 32px)
+    );
+
+  margin:
+    0 auto 50px;
+
+}
+
+
+.section-heading {
+
+  margin-bottom:
+    20px;
+
+}
+
+
+.section-heading h1 {
+
+  margin:
+    0;
+
+  font-size:
+    28px;
+
+  letter-spacing:
+    -0.5px;
+
+}
+
+
+.section-heading p {
+
+  margin:
+    5px 0 0;
+
+  color:
+    var(--muted);
+
+  font-size:
+    14px;
+
+}
+
+
+/* =========================================================
+   SLOT
+========================================================= */
+
+.slot-section {
+
+  margin-bottom:
+    28px;
+
+}
+
+
+.slot-header {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    15px;
+
+  padding:
+    18px 20px;
+
+  background:
+    var(--dark);
+
+  color:
+    white;
+
+  border-radius:
+    18px 18px 0 0;
+
+}
+
+
+.slot-title {
+
+  font-size:
+    18px;
+
+  font-weight:
+    850;
+
+}
+
+
+.slot-subtitle {
+
+  margin-top:
+    4px;
+
+  opacity:
+    0.65;
+
+  font-size:
+    12px;
+
+}
+
+
+.slot-total {
+
+  white-space:
+    nowrap;
+
+  font-size:
+    17px;
+
+  font-weight:
+    850;
+
+}
+
+
+.building-list {
+
+  padding:
+    12px;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    12px;
+
+  background:
+    #eae6e2;
+
+  border-radius:
+    0 0 18px 18px;
+
+}
+
+
+/* =========================================================
+   BUILDING
+========================================================= */
+
+.building-card {
+
+  overflow:
+    hidden;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    15px;
+
+  box-shadow:
+    0 2px 8px
+    rgba(
+      30,
+      20,
+      10,
+      0.035
+    );
+
+}
+
+
+.building-header {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    15px;
+
+  padding:
+    16px 18px;
+
+  background:
+    var(--surface-soft);
+
+  border-bottom:
+    1px solid var(--border);
+
+}
+
+
+.building-title {
+
+  font-size:
+    16px;
+
+  font-weight:
+    850;
+
+}
+
+
+.building-subtitle {
+
+  margin-top:
+    4px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    12px;
+
+}
+
+
+.building-total {
+
+  font-size:
+    15px;
+
+  font-weight:
+    850;
+
+  white-space:
+    nowrap;
+
+}
+
+
+/* =========================================================
+   CUSTOMER
+========================================================= */
+
+.customer-card {
+
+  padding:
+    16px 18px;
+
+  border-bottom:
+    1px solid #eee8e3;
+
+}
+
+
+.customer-card:last-child {
+
+  border-bottom:
+    0;
+
+}
+
+
+.customer-header {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    flex-start;
+
+  gap:
+    15px;
+
+}
+
+
+.customer-name {
+
+  font-size:
+    16px;
+
+  font-weight:
+    850;
+
+}
+
+
+.customer-apartment {
+
+  margin-top:
+    3px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    12px;
+
+  font-weight:
+    650;
+
+}
+
+
+.phone {
+
+  display:
+    inline-block;
+
+  margin-top:
+    7px;
+
+  color:
+    var(--accent);
+
+  text-decoration:
+    none;
+
+  font-size:
+    13px;
+
+  font-weight:
+    750;
+
+}
+
+
+.customer-total {
+
+  font-size:
+    15px;
+
+  font-weight:
+    850;
+
+  white-space:
+    nowrap;
+
+}
+
+
+/* =========================================================
+   ORDER
+========================================================= */
+
+.customer-orders {
+
+  margin-top:
+    12px;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    8px;
+
+}
+
+
+.order-card {
+
+  padding:
+    13px;
+
+  background:
+    #f8f6f3;
+
+  border:
+    1px solid #ebe4df;
+
+  border-radius:
+    11px;
+
+}
+
+
+.order-top {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    flex-start;
+
+  gap:
+    10px;
+
+}
+
+
+.order-id {
+
+  color:
+    #665b54;
+
+  font-size:
+    11px;
+
+  font-weight:
+    750;
+
+}
+
+
+.order-price {
+
+  font-size:
+    14px;
+
+  font-weight:
+    850;
+
+  white-space:
+    nowrap;
+
+}
+
+
+.assignment {
+
+  display:
+    inline-flex;
+
+  margin-top:
+    6px;
+
+  padding:
+    5px 8px;
+
+  border-radius:
+    7px;
+
+  font-size:
+    10px;
+
+  font-weight:
+    850;
+
+}
+
+
+.assignment.assigned {
+
+  color:
+    var(--success);
+
+  background:
+    var(--success-soft);
+
+}
+
+
+.assignment.unassigned {
+
+  color:
+    var(--warning);
+
+  background:
+    var(--warning-soft);
+
+}
+
+
+.order-meta {
+
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    6px;
+
+  margin-top:
+    10px;
+
+}
+
+
+.order-meta span {
+
+  padding:
+    5px 8px;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    7px;
+
+  color:
+    #6f655e;
+
+  font-size:
+    10px;
+
+  font-weight:
+    750;
+
+}
+
+
+.order-items {
+
+  margin-top:
+    10px;
+
+  padding-top:
+    8px;
+
+  border-top:
+    1px solid #e7e1dc;
+
+}
+
+
+.order-item {
+
+  padding:
+    3px 0;
+
+  font-size:
+    13px;
+
+  font-weight:
+    650;
+
+}
+
+
+.no-items {
+
+  color:
+    #99908a;
+
+  font-size:
+    12px;
+
+}
+
+
+/* =========================================================
+   SUPPLY
+========================================================= */
+
+.supply-summary {
+
+  margin-bottom:
+    12px;
+
+  padding:
+    14px 16px;
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  background:
+    var(--accent-soft);
+
+  border:
+    1px solid #efd8c9;
+
+  border-radius:
+    14px;
+
+}
+
+
+.supply-summary strong {
+
+  font-size:
+    14px;
+
+}
+
+
+.supply-summary span {
+
+  color:
+    var(--muted);
+
+  font-size:
+    12px;
+
+}
+
+
+.supply-card {
+
+  overflow:
+    hidden;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    17px;
+
+  box-shadow:
+    0 3px 14px
+    rgba(
+      30,
+      20,
+      10,
+      0.04
+    );
+
+}
+
+
+.supply-header {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr auto;
+
+  padding:
+    15px 18px;
+
+  background:
+    var(--dark);
+
+  color:
+    white;
+
+  font-size:
+    12px;
+
+  font-weight:
+    850;
+
+}
+
+
+.supply-row {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr auto;
+
+  align-items:
+    center;
+
+  gap:
+    20px;
+
+  padding:
+    17px 18px;
+
+  border-bottom:
+    1px solid #eee8e3;
+
+}
+
+
+.supply-row:last-child {
+
+  border-bottom:
+    0;
+
+}
+
+
+.supply-product {
+
+  font-size:
+    15px;
+
+  font-weight:
+    800;
+
+}
+
+
+.supply-orders {
+
+  margin-top:
+    4px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    11px;
+
+}
+
+
+.supply-quantity {
+
+  min-width:
+    48px;
+
+  padding:
+    9px 11px;
+
+  background:
+    var(--accent-soft);
+
+  border-radius:
+    9px;
+
+  color:
+    var(--accent);
+
+  text-align:
+    center;
+
+  font-size:
+    18px;
+
+  font-weight:
+    900;
+
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-state {
+
+  padding:
+    55px 25px;
+
+  background:
+    white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:
+    18px;
+
+  text-align:
+    center;
+
+}
+
+
+.empty-icon {
+
+  margin-bottom:
+    12px;
+
+  font-size:
+    42px;
+
+}
+
+
+.empty-state h2 {
+
+  margin:
+    0;
+
+  font-size:
+    20px;
+
+}
+
+
+.empty-state p {
+
+  margin:
+    7px 0 0;
+
+  color:
+    var(--muted);
+
+  font-size:
+    13px;
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading-overlay {
+
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  z-index:
+    100;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  background:
+    rgba(
+      20,
+      15,
+      12,
+      0.22
+    );
+
+  backdrop-filter:
+    blur(3px);
+
+}
+
+
+.loading-card {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    12px;
+
+  padding:
+    16px 20px;
+
+  background:
+    white;
+
+  border-radius:
+    14px;
+
+  box-shadow:
+    0 12px 35px
+    rgba(
+      0,
+      0,
+      0,
+      0.12
+    );
+
+  font-size:
+    13px;
+
+  font-weight:
+    750;
+
+}
+
+
+.spinner {
+
+  width:
+    20px;
+
+  height:
+    20px;
+
+  border:
+    3px solid #e5ded8;
+
+  border-top-color:
+    var(--accent);
+
+  border-radius:
+    50%;
+
+  animation:
+    spin 0.8s
+    linear infinite;
+
+}
+
+
+@keyframes spin {
+
+  to {
+
+    transform:
+      rotate(360deg);
+
+  }
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+
+  position:
+    fixed;
+
+  left:
+    50%;
+
+  bottom:
+    25px;
+
+  z-index:
+    200;
+
+  transform:
+    translate(
+      -50%,
+      20px
+    );
+
+  opacity:
+    0;
+
+  pointer-events:
+    none;
+
+  padding:
+    12px 17px;
+
+  background:
+    var(--dark);
+
+  color:
+    white;
+
+  border-radius:
+    10px;
+
+  font-size:
+    12px;
+
+  font-weight:
+    700;
+
+  transition:
+    0.2s ease;
+
+}
+
+
+.toast.show {
+
+  opacity:
+    1;
+
+  transform:
+    translate(
+      -50%,
+      0
+    );
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (
+  max-width: 650px
+) {
+
+  .topbar {
+
+    width:
+      calc(100% - 24px);
+
+    padding-top:
+      17px;
+
+  }
+
+
+  .main-nav,
+  .page-controls,
+  .view {
+
+    width:
+      calc(100% - 24px);
+
+  }
+
+
+  .app-brand {
+
+    font-size:
+      22px;
+
+  }
+
+
+  .section-heading h1 {
+
+    font-size:
+      25px;
+
+  }
+
+
+  .slot-header {
+
+    padding:
+      15px;
+
+  }
+
+
+  .slot-title {
+
+    font-size:
+      16px;
+
+  }
+
+
+  .slot-total {
+
+    font-size:
+      14px;
+
+  }
+
+
+  .building-list {
+
+    padding:
+      8px;
+
+  }
+
+
+  .building-header {
+
+    padding:
+      14px;
+
+  }
+
+
+  .customer-card {
+
+    padding:
+      14px;
+
+  }
+
+
+  .customer-name {
+
+    font-size:
+      15px;
+
+  }
+
+
+  .order-card {
+
+    padding:
+      11px;
+
+  }
+
+
+  .supply-row {
+
+    padding:
+      15px;
+
+  }
+
+
+  .login-card {
+
+    padding:
+      28px 22px;
+
+  }
+
+}
