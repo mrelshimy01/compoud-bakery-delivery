@@ -1,72 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111827">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>MoharamBake Delivery</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="styles.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#111827"
+  >
+
+  <meta
+    name="mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="MoharamBake Delivery"
+  >
+
+  <title>
+    MoharamBake Delivery
+  </title>
+
+  <link
+    rel="manifest"
+    href="manifest.webmanifest"
+  >
+
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+
 </head>
+
+
 <body>
-  <section id="loginScreen" class="screen login-screen">
+
+  <!-- =====================================================
+       LOGIN
+  ====================================================== -->
+
+  <section
+    id="loginScreen"
+    class="screen login-screen"
+  >
+
     <div class="login-card">
-      <div class="brand-icon">🥖</div>
-      <h1>MoharamBake</h1>
-      <p class="subtitle">Delivery</p>
-      <form id="loginForm">
-        <label for="username">Delivery Man</label>
-        <input id="username" type="text" autocomplete="username" placeholder="Username" required>
-        <label for="password">Password</label>
-        <input id="password" type="password" autocomplete="current-password" placeholder="Password" required>
-        <button id="loginButton" class="primary-button" type="submit">Login</button>
+
+      <div class="brand-icon">
+        🥖
+      </div>
+
+      <div class="brand-title">
+        MoharamBake
+      </div>
+
+      <div class="brand-subtitle">
+        Delivery
+      </div>
+
+
+      <form
+        id="loginForm"
+        autocomplete="off"
+      >
+
+        <label
+          for="username"
+        >
+          Delivery Man
+        </label>
+
+        <input
+          id="username"
+          name="username"
+          type="text"
+          autocomplete="username"
+          placeholder="Ahmed"
+          required
+        >
+
+
+        <label
+          for="password"
+        >
+          Password
+        </label>
+
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Password"
+          required
+        >
+
+
+        <button
+          id="loginButton"
+          class="primary-button"
+          type="submit"
+        >
+          Login
+        </button>
+
+
+        <div
+          id="loginError"
+          class="login-error"
+        ></div>
+
       </form>
-      <div id="loginError" class="error-message"></div>
+
     </div>
+
   </section>
 
-  <section id="appScreen" class="screen hidden">
+
+  <!-- =====================================================
+       APP
+  ====================================================== -->
+
+  <section
+    id="appScreen"
+    class="screen hidden"
+  >
+
     <header class="topbar">
+
       <div>
-        <div class="brand">MoharamBake</div>
-        <div id="userLabel" class="user-label"></div>
+
+        <div class="app-brand">
+          MoharamBake
+        </div>
+
+        <div
+          id="userLabel"
+          class="user-label"
+        ></div>
+
       </div>
-      <button id="logoutButton" class="ghost-button">Logout</button>
+
+
+      <button
+        id="logoutButton"
+        class="logout-button"
+        type="button"
+      >
+        Logout
+      </button>
+
     </header>
 
-    <nav id="mainNav" class="main-nav">
-      <button class="nav-button active" data-view="delivery">🚚 Delivery</button>
-      <button class="nav-button" data-view="supply">🏭 Supply</button>
+
+    <nav
+      id="mainNav"
+      class="main-nav hidden"
+    >
+
+      <button
+        class="nav-button active"
+        data-view="delivery"
+        type="button"
+      >
+        🚚 Delivery
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="supply"
+        type="button"
+      >
+        🏭 Supply
+      </button>
+
     </nav>
 
-    <div class="controls">
-      <button id="refreshButton" class="primary-button">Refresh</button>
-      <div id="lastUpdated" class="last-updated"></div>
+
+    <div class="page-controls">
+
+      <button
+        id="refreshButton"
+        class="refresh-button"
+        type="button"
+      >
+        ↻ Refresh
+      </button>
+
+      <span
+        id="lastUpdated"
+        class="last-updated"
+      >
+        Not updated
+      </span>
+
     </div>
 
-    <main id="deliveryView" class="view">
+
+    <!-- ===================================================
+         DELIVERY VIEW
+    ==================================================== -->
+
+    <main
+      id="deliveryView"
+      class="view"
+    >
+
       <div class="section-heading">
-        <h2>Deliveries</h2>
-        <p id="deliverySummary">Loading...</p>
+
+        <div>
+
+          <h1>
+            Deliveries
+          </h1>
+
+          <p
+            id="deliverySummary"
+          >
+            Loading...
+          </p>
+
+        </div>
+
       </div>
-      <div id="deliveryOrders" class="building-list"></div>
+
+
+      <div
+        id="deliveryOrders"
+        class="delivery-list"
+      ></div>
+
     </main>
 
-    <main id="supplyView" class="view hidden">
+
+    <!-- ===================================================
+         SUPPLY VIEW
+    ==================================================== -->
+
+    <main
+      id="supplyView"
+      class="view hidden"
+    >
+
       <div class="section-heading">
-        <h2>Supply</h2>
-        <p>Consolidated active orders</p>
+
+        <div>
+
+          <h1>
+            Supply
+          </h1>
+
+          <p>
+            Consolidated active orders
+          </p>
+
+        </div>
+
       </div>
-      <div id="supplyList" class="supply-list"></div>
+
+
+      <div
+        id="supplyList"
+      ></div>
+
     </main>
+
+
   </section>
 
-  <div id="loading" class="loading-overlay hidden">
-    <div class="spinner"></div>
-    <span>Loading...</span>
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  <div
+    id="loading"
+    class="loading-overlay hidden"
+  >
+
+    <div class="loading-card">
+
+      <div class="spinner"></div>
+
+      <span>
+        Updating...
+      </span>
+
+    </div>
+
   </div>
-  <div id="toast" class="toast"></div>
+
+
+  <!-- =====================================================
+       TOAST
+  ====================================================== -->
+
+  <div
+    id="toast"
+    class="toast"
+  ></div>
+
+
   <script src="app.js"></script>
+
 </body>
+
 </html>
