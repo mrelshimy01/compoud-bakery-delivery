@@ -132,6 +132,522 @@ function loadSession() {
 
 
 /* =========================================================
+   DATE HELPERS
+========================================================= */
+
+/*
+  Returns today's date in local browser time as:
+
+  YYYY-MM-DD
+*/
+
+function todayDateKey() {
+
+  const now =
+    new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(
+      now.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+  const day =
+    String(
+      now.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+/*
+  Converts different date formats coming from
+  Google Sheets / Apps Script into YYYY-MM-DD.
+
+  Supported examples:
+
+  2026-08-19
+  8/19/2026
+  08/19/2026
+  Wed, Aug 19
+  Wed, Aug 19, 2026
+  Date objects serialized by Apps Script
+*/
+
+function normalizeDateKey(order) {
+
+  if (!order) {
+    return "unknown";
+  }
+
+
+  /*
+    First preference:
+    API-provided deliveryDateKey
+  */
+
+  const explicitKey =
+    String(
+      order.deliveryDateKey ||
+      ""
+    ).trim();
+
+
+  if (
+    /^\d{4}-\d{1,2}-\d{1,2}$/
+      .test(explicitKey)
+  ) {
+
+    const parts =
+      explicitKey.split("-");
+
+    return (
+      parts[0] +
+      "-" +
+      String(parts[1])
+        .padStart(2, "0") +
+      "-" +
+      String(parts[2])
+        .padStart(2, "0")
+    );
+
+  }
+
+
+  /*
+    Try deliveryDate.
+  */
+
+  const raw =
+    String(
+      order.deliveryDate ||
+      order.date ||
+      ""
+    ).trim();
+
+
+  if (!raw) {
+
+    /*
+      Sometimes the API may already provide
+      createdAt/date fields.
+    */
+
+    const fallback =
+      String(
+        order.deliveryDateLabel ||
+        ""
+      ).trim();
+
+    if (!fallback) {
+      return "unknown";
+    }
+
+    return parseLooseDate(
+      fallback
+    );
+
+  }
+
+
+  return parseLooseDate(
+    raw
+  );
+
+}
+
+
+/*
+  Parses common date strings.
+*/
+
+function parseLooseDate(value) {
+
+  const text =
+    String(
+      value || ""
+    ).trim();
+
+
+  if (!text) {
+    return "unknown";
+  }
+
+
+  /*
+    YYYY-MM-DD
+  */
+
+  let match =
+    text.match(
+      /^(\d{4})-(\d{1,2})-(\d{1,2})/
+    );
+
+
+  if (match) {
+
+    return (
+      match[1] +
+      "-" +
+      String(match[2])
+        .padStart(2, "0") +
+      "-" +
+      String(match[3])
+        .padStart(2, "0")
+    );
+
+  }
+
+
+  /*
+    MM/DD/YYYY
+  */
+
+  match =
+    text.match(
+      /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+  if (match) {
+
+    return (
+      match[3] +
+      "-" +
+      String(match[1])
+        .padStart(2, "0") +
+      "-" +
+      String(match[2])
+        .padStart(2, "0")
+    );
+
+  }
+
+
+  /*
+    MM/DD/YY
+  */
+
+  match =
+    text.match(
+      /^(\d{1,2})\/(\d{1,2})\/(\d{2})/
+    );
+
+
+  if (match) {
+
+    const year =
+      2000 +
+      Number(
+        match[3]
+      );
+
+    return (
+      year +
+      "-" +
+      String(match[1])
+        .padStart(2, "0") +
+      "-" +
+      String(match[2])
+        .padStart(2, "0")
+    );
+
+  }
+
+
+  /*
+    Google Sheets may return something like:
+
+    "Thu, Aug 20, 2026"
+  */
+
+  match =
+    text.match(
+      /(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*,?\s+([A-Za-z]+)\s+(\d{1,2})(?:,?\s+(\d{4}))?/i
+    );
+
+
+  if (match) {
+
+    const monthNames = {
+
+      jan: 1,
+      january: 1,
+
+      feb: 2,
+      february: 2,
+
+      mar: 3,
+      march: 3,
+
+      apr: 4,
+      april: 4,
+
+      may: 5,
+
+      jun: 6,
+      june: 6,
+
+      jul: 7,
+      july: 7,
+
+      aug: 8,
+      august: 8,
+
+      sep: 9,
+      september: 9,
+
+      oct: 10,
+      october: 10,
+
+      nov: 11,
+      november: 11,
+
+      dec: 12,
+      december: 12
+
+    };
+
+
+    const month =
+      monthNames[
+        String(
+          match[1]
+        ).toLowerCase()
+      ];
+
+
+    if (month) {
+
+      /*
+        If year is missing, use current year.
+      */
+
+      const year =
+        Number(
+          match[3] ||
+          new Date()
+            .getFullYear()
+        );
+
+
+      return (
+        year +
+        "-" +
+        String(month)
+          .padStart(2, "0") +
+        "-" +
+        String(
+          Number(match[2])
+        ).padStart(2, "0")
+      );
+
+    }
+
+  }
+
+
+  /*
+    Last attempt:
+    native Date parser.
+  */
+
+  const parsed =
+    new Date(text);
+
+
+  if (
+    !Number.isNaN(
+      parsed.getTime()
+    )
+  ) {
+
+    return (
+      parsed.getFullYear() +
+      "-" +
+      String(
+        parsed.getMonth() + 1
+      ).padStart(2, "0") +
+      "-" +
+      String(
+        parsed.getDate()
+      ).padStart(2, "0")
+    );
+
+  }
+
+
+  return "unknown";
+
+}
+
+
+/*
+  Make sure every order has a normalized
+  deliveryDateKey before rendering.
+*/
+
+function normalizeOrder(order) {
+
+  const normalized = {
+    ...order
+  };
+
+
+  normalized.deliveryDateKey =
+    normalizeDateKey(
+      normalized
+    );
+
+
+  /*
+    Normalize common numeric fields.
+  */
+
+  normalized.total =
+    Number(
+      normalized.total || 0
+    );
+
+
+  /*
+    Ensure items is always an array.
+  */
+
+  if (
+    !Array.isArray(
+      normalized.items
+    )
+  ) {
+
+    normalized.items = [];
+
+  }
+
+
+  return normalized;
+
+}
+
+
+/* =========================================================
+   ORDER FILTERING
+========================================================= */
+
+function isActiveOrder(order) {
+
+  const status =
+    String(
+      order.status ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  /*
+    Only Active orders should appear.
+
+    Anything explicitly cancelled,
+    canceled, completed, delivered etc.
+    is excluded.
+  */
+
+  if (
+    status === "cancelled" ||
+    status === "canceled" ||
+    status === "completed" ||
+    status === "delivered" ||
+    status === "inactive"
+  ) {
+
+    return false;
+
+  }
+
+
+  /*
+    If status exists, require Active.
+
+    This prevents unknown/corrupt rows
+    from accidentally appearing.
+  */
+
+  if (
+    status &&
+    status !== "active"
+  ) {
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/*
+  Delivery users:
+
+  Only today's orders.
+
+  Admin:
+
+  All active orders.
+*/
+
+function filterOrdersForCurrentUser(
+  source
+) {
+
+  const active =
+    source
+      .map(normalizeOrder)
+      .filter(
+        isActiveOrder
+      );
+
+
+  const isAdmin =
+    session &&
+    session.user &&
+    session.user.role ===
+      "admin";
+
+
+  if (isAdmin) {
+
+    return active;
+
+  }
+
+
+  const today =
+    todayDateKey();
+
+
+  return active.filter(
+    order =>
+      order.deliveryDateKey ===
+      today
+  );
+
+}
+
+
+/* =========================================================
    API
 ========================================================= */
 
@@ -436,7 +952,11 @@ async function refreshData() {
       await apiGetOrders();
 
 
-    orders =
+    /*
+      Normalize the API orders first.
+    */
+
+    const apiOrders =
       Array.isArray(
         result.orders
       )
@@ -444,12 +964,51 @@ async function refreshData() {
         : [];
 
 
+    const normalizedOrders =
+      apiOrders
+        .map(
+          normalizeOrder
+        )
+        .filter(
+          isActiveOrder
+        );
+
+
+    /*
+      Delivery view.
+
+      Admin:
+        all active orders
+
+      Delivery guy:
+        today's active assigned orders
+        as returned by the API
+    */
+
+    orders =
+      filterOrdersForCurrentUser(
+        normalizedOrders
+      );
+
+
+    /*
+      IMPORTANT:
+
+      Do NOT use result.supply here.
+
+      The previous implementation depended on
+      result.supply, but those objects were missing
+      delivery date / items / order details.
+
+      Supply now uses the same complete active
+      order objects, so it has the complete item
+      information.
+    */
+
     supply =
-      Array.isArray(
-        result.supply
-      )
-        ? result.supply
-        : [];
+      filterOrdersForCurrentUser(
+        normalizedOrders
+      );
 
 
     renderDelivery();
@@ -466,6 +1025,7 @@ async function refreshData() {
           {
             hour:
               "2-digit",
+
             minute:
               "2-digit"
           }
@@ -553,12 +1113,14 @@ function slotInfo(slot) {
   if (!match) {
 
     return {
+
       sort:
         99999,
 
       label:
         slot ||
         "No slot"
+
     };
 
   }
@@ -621,182 +1183,262 @@ function groupOrders(list) {
   const dayMap = {};
 
 
-  list.forEach(order => {
+  list.forEach(
+    rawOrder => {
 
-    const dateKey =
-      order.deliveryDateKey ||
-      "unknown";
+      const order =
+        normalizeOrder(
+          rawOrder
+        );
 
 
-    if (!dayMap[dateKey]) {
+      const dateKey =
+        order.deliveryDateKey ||
+        "unknown";
 
-      dayMap[dateKey] = {
 
-        dateKey:
-          dateKey,
+      if (
+        !dayMap[
+          dateKey
+        ]
+      ) {
 
-        orders:
-          []
+        dayMap[
+          dateKey
+        ] = {
 
-      };
+          dateKey:
+            dateKey,
+
+          orders:
+            []
+
+        };
+
+      }
+
+
+      dayMap[
+        dateKey
+      ]
+        .orders
+        .push(
+          order
+        );
 
     }
-
-
-    dayMap[dateKey]
-      .orders
-      .push(order);
-
-  });
+  );
 
 
   return Object
-    .values(dayMap)
-    .sort(
-      (a, b) =>
-        a.dateKey.localeCompare(
-          b.dateKey
-        )
+    .values(
+      dayMap
     )
-    .map(day => {
+    .sort(
+      (a, b) => {
 
-      const slotMap = {};
+        /*
+          Put unknown dates last.
+        */
 
+        if (
+          a.dateKey ===
+          "unknown"
+        ) {
 
-      day.orders.forEach(order => {
-
-        const info =
-          slotInfo(
-            order.deliverySlot
-          );
-
-
-        const key =
-          String(
-            info.sort
-          );
-
-
-        if (!slotMap[key]) {
-
-          slotMap[key] = {
-
-            sort:
-              info.sort,
-
-            label:
-              info.label,
-
-            orders:
-              []
-
-          };
+          return 1;
 
         }
 
 
-        slotMap[key]
-          .orders
-          .push(order);
+        if (
+          b.dateKey ===
+          "unknown"
+        ) {
 
-      });
+          return -1;
 
-
-      const slots =
-        Object
-          .values(slotMap)
-          .sort(
-            (a, b) =>
-              a.sort -
-              b.sort
-          )
-          .map(slot => {
-
-            const buildingMap = {};
+        }
 
 
-            slot.orders.forEach(
-              order => {
+        return a.dateKey.localeCompare(
+          b.dateKey
+        );
 
-                const building =
-                  String(
-                    order.building ||
-                    "Unspecified"
-                  ).trim();
+      }
+    )
+    .map(
+      day => {
 
-
-                if (
-                  !buildingMap[
-                    building
-                  ]
-                ) {
-
-                  buildingMap[
-                    building
-                  ] = [];
-
-                }
+        const slotMap = {};
 
 
-                buildingMap[
-                  building
-                ].push(order);
+        day.orders.forEach(
+          order => {
+
+            const info =
+              slotInfo(
+                order.deliverySlot
+              );
+
+
+            /*
+              Include label in key so that
+              malformed slots don't collapse
+              together accidentally.
+            */
+
+            const key =
+              String(
+                info.sort
+              ) +
+              "|" +
+              String(
+                info.label || ""
+              );
+
+
+            if (
+              !slotMap[
+                key
+              ]
+            ) {
+
+              slotMap[
+                key
+              ] = {
+
+                sort:
+                  info.sort,
+
+                label:
+                  info.label,
+
+                orders:
+                  []
+
+              };
+
+            }
+
+
+            slotMap[
+              key
+            ]
+              .orders
+              .push(
+                order
+              );
+
+          }
+        );
+
+
+        const slots =
+          Object
+            .values(
+              slotMap
+            )
+            .sort(
+              (a, b) =>
+                a.sort -
+                b.sort
+            )
+            .map(
+              slot => {
+
+                const buildingMap = {};
+
+
+                slot.orders.forEach(
+                  order => {
+
+                    const building =
+                      String(
+                        order.building ||
+                        "Unspecified"
+                      )
+                        .trim();
+
+
+                    if (
+                      !buildingMap[
+                        building
+                      ]
+                    ) {
+
+                      buildingMap[
+                        building
+                      ] = [];
+
+                    }
+
+
+                    buildingMap[
+                      building
+                    ].push(
+                      order
+                    );
+
+                  }
+                );
+
+
+                const buildings =
+                  Object
+                    .keys(
+                      buildingMap
+                    )
+                    .sort(
+                      (a, b) =>
+                        a.localeCompare(
+                          b,
+                          undefined,
+                          {
+                            numeric:
+                              true
+                          }
+                        )
+                    )
+                    .map(
+                      building => ({
+
+                        building:
+                          building,
+
+                        orders:
+                          buildingMap[
+                            building
+                          ]
+
+                      })
+                    );
+
+
+                return {
+
+                  ...slot,
+
+                  buildings:
+                    buildings
+
+                };
 
               }
             );
 
 
-            const buildings =
-              Object
-                .keys(buildingMap)
-                .sort(
-                  (a, b) =>
-                    a.localeCompare(
-                      b,
-                      undefined,
-                      {
-                        numeric:
-                          true
-                      }
-                    )
-                )
-                .map(
-                  building => ({
+        return {
 
-                    building:
-                      building,
+          ...day,
 
-                    orders:
-                      buildingMap[
-                        building
-                      ]
+          slots:
+            slots
 
-                  })
-                );
+        };
 
-
-            return {
-
-              ...slot,
-
-              buildings:
-                buildings
-
-            };
-
-          });
-
-
-      return {
-
-        ...day,
-
-        slots:
-          slots
-
-      };
-
-    });
+      }
+    );
 
 }
 
@@ -807,7 +1449,8 @@ function formatDayLabel(
 
   if (
     !dateKey ||
-    dateKey === "unknown"
+    dateKey ===
+      "unknown"
   ) {
 
     return "Unknown Date";
@@ -820,7 +1463,8 @@ function formatDayLabel(
 
 
   if (
-    parts.length !== 3
+    parts.length !==
+    3
   ) {
 
     return dateKey;
@@ -830,15 +1474,33 @@ function formatDayLabel(
 
   const date =
     new Date(
-      Number(parts[0]),
-      Number(parts[1]) - 1,
-      Number(parts[2])
+      Number(
+        parts[0]
+      ),
+      Number(
+        parts[1]
+      ) - 1,
+      Number(
+        parts[2]
+      )
     );
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return dateKey;
+
+  }
 
 
   return date.toLocaleDateString(
     "en-US",
     {
+
       weekday:
         "long",
 
@@ -850,6 +1512,7 @@ function formatDayLabel(
 
       year:
         "numeric"
+
     }
   );
 
@@ -1292,7 +1955,8 @@ function renderOrder(
             class="order-id"
           >
             ${escapeHtml(
-              order.orderId
+              order.orderId ||
+              ""
             )}
           </div>
 
@@ -1378,7 +2042,8 @@ function renderOrder(
 
 
       ${
-        mode === "delivery"
+        mode ===
+        "delivery"
           ? `
             <div
               class="order-meta"
@@ -1476,11 +2141,15 @@ function emptyState(
       </div>
 
       <h2>
-        ${escapeHtml(title)}
+        ${escapeHtml(
+          title
+        )}
       </h2>
 
       <p>
-        ${escapeHtml(text)}
+        ${escapeHtml(
+          text
+        )}
       </p>
 
     </div>
