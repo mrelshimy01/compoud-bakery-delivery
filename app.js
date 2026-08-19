@@ -3,11 +3,8 @@ const API_URL =
 
 
 let session = null;
-
 let orders = [];
-
 let supply = [];
-
 let currentView = "delivery";
 
 
@@ -19,45 +16,22 @@ const $ = id =>
    HELPERS
 ========================================================= */
 
-function escapeHtml(
-  value
-) {
+function escapeHtml(value) {
 
-  return String(
-    value ?? ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 }
 
 
-function money(
-  value
-) {
+function money(value) {
 
   return (
-    Number(
-      value || 0
-    )
+    Number(value || 0)
       .toLocaleString(
         "en-US",
         {
@@ -70,9 +44,7 @@ function money(
 }
 
 
-function showLoading(
-  show
-) {
+function showLoading(show) {
 
   $("loading")
     .classList
@@ -84,27 +56,21 @@ function showLoading(
 }
 
 
-function toast(
-  message
-) {
+function toast(message) {
 
   const element =
     $("toast");
 
-
   element.textContent =
     message;
-
 
   element.classList.add(
     "show"
   );
 
-
   clearTimeout(
     toast.timer
   );
-
 
   toast.timer =
     setTimeout(
@@ -127,9 +93,7 @@ function saveSession() {
 
     localStorage.setItem(
       "moharambake_delivery_session",
-      JSON.stringify(
-        session
-      )
+      JSON.stringify(session)
     );
 
   } else {
@@ -152,19 +116,13 @@ function loadSession() {
         "moharambake_delivery_session"
       );
 
-
     if (!saved) {
       return null;
     }
 
+    return JSON.parse(saved);
 
-    return JSON.parse(
-      saved
-    );
-
-  } catch (
-    error
-  ) {
+  } catch (error) {
 
     return null;
 
@@ -191,10 +149,8 @@ async function apiLogin(
           "POST",
 
         headers: {
-
           "Content-Type":
             "text/plain;charset=utf-8"
-
         },
 
         body:
@@ -219,20 +175,11 @@ async function apiLogin(
     await response.json();
 
 
-  if (!response.ok) {
-
-    throw new Error(
-      "Login request failed."
-    );
-
-  }
-
-
   if (!data.ok) {
 
     throw new Error(
       data.error ||
-      "Invalid login."
+      "Login failed."
     );
 
   }
@@ -254,10 +201,8 @@ async function apiGetOrders() {
           "POST",
 
         headers: {
-
           "Content-Type":
             "text/plain;charset=utf-8"
-
         },
 
         body:
@@ -282,20 +227,11 @@ async function apiGetOrders() {
     await response.json();
 
 
-  if (!response.ok) {
-
-    throw new Error(
-      "Unable to load deliveries."
-    );
-
-  }
-
-
   if (!data.ok) {
 
     throw new Error(
       data.error ||
-      "Unable to load deliveries."
+      "Unable to load data."
     );
 
   }
@@ -310,9 +246,7 @@ async function apiGetOrders() {
    LOGIN
 ========================================================= */
 
-async function login(
-  event
-) {
+async function login(event) {
 
   event.preventDefault();
 
@@ -340,7 +274,6 @@ async function login(
   button.disabled =
     true;
 
-
   button.textContent =
     "Logging in...";
 
@@ -367,26 +300,20 @@ async function login(
 
     saveSession();
 
-
     showApp();
-
 
     await refreshData();
 
-  } catch (
-    error
-  ) {
+  } catch (error) {
 
     $("loginError")
       .textContent =
-      error.message ||
-      "Unable to login.";
+      error.message;
 
   } finally {
 
     button.disabled =
       false;
-
 
     button.textContent =
       "Login";
@@ -457,6 +384,13 @@ function showApp() {
     session.user.name;
 
 
+  $("mainNav")
+    .classList
+    .remove(
+      "hidden"
+    );
+
+
   if (
     session.user.role ===
     "admin"
@@ -493,9 +427,7 @@ async function refreshData() {
   }
 
 
-  showLoading(
-    true
-  );
+  showLoading(true);
 
 
   try {
@@ -534,35 +466,28 @@ async function refreshData() {
           {
             hour:
               "2-digit",
-
             minute:
               "2-digit"
           }
         );
 
-  } catch (
-    error
-  ) {
+
+  } catch (error) {
 
     toast(
-      error.message ||
-      "Unable to refresh."
+      error.message
     );
 
   } finally {
 
-    showLoading(
-      false
-    );
+    showLoading(false);
 
   }
 
 }
 
 
-function setView(
-  view
-) {
+function setView(view) {
 
   currentView =
     view;
@@ -572,8 +497,7 @@ function setView(
     .classList
     .toggle(
       "hidden",
-      view !==
-        "delivery"
+      view !== "delivery"
     );
 
 
@@ -581,8 +505,7 @@ function setView(
     .classList
     .toggle(
       "hidden",
-      view !==
-        "supply"
+      view !== "supply"
     );
 
 
@@ -608,12 +531,10 @@ function setView(
 
 
 /* =========================================================
-   DELIVERY GROUPING
+   GROUPING
 ========================================================= */
 
-function getSlotKey(
-  slot
-) {
+function slotInfo(slot) {
 
   const text =
     String(
@@ -633,11 +554,11 @@ function getSlotKey(
 
     return {
       sort:
-        9999,
+        99999,
 
       label:
         slot ||
-        "No Delivery Slot"
+        "No slot"
     };
 
   }
@@ -656,13 +577,13 @@ function getSlotKey(
     );
 
 
-  const ampm =
+  const meridiem =
     match[3] ||
     "";
 
 
   if (
-    ampm === "PM" &&
+    meridiem === "PM" &&
     hour < 12
   ) {
 
@@ -672,7 +593,7 @@ function getSlotKey(
 
 
   if (
-    ampm === "AM" &&
+    meridiem === "AM" &&
     hour === 12
   ) {
 
@@ -695,232 +616,248 @@ function getSlotKey(
 }
 
 
-function groupBySlot(
-  list
-) {
+function groupOrders(list) {
 
-  const groups =
-    {};
+  const dayMap = {};
 
 
-  list.forEach(
-    order => {
+  list.forEach(order => {
 
-      const info =
-        getSlotKey(
-          order.deliverySlot
-        );
+    const dateKey =
+      order.deliveryDateKey ||
+      "unknown";
 
 
-      const key =
-        String(
-          info.sort
-        );
+    if (!dayMap[dateKey]) {
 
+      dayMap[dateKey] = {
 
-      if (!groups[key]) {
-
-        groups[key] = {
-
-          sort:
-            info.sort,
-
-          label:
-            info.label,
-
-          orders:
-            []
-
-        };
-
-      }
-
-
-      groups[key]
-        .orders
-        .push(
-          order
-        );
-
-    }
-  );
-
-
-  return Object
-    .values(
-      groups
-    )
-    .sort(
-      (
-        a,
-        b
-      ) =>
-        a.sort -
-        b.sort
-    );
-
-}
-
-
-function groupByBuilding(
-  list
-) {
-
-  const groups =
-    {};
-
-
-  list.forEach(
-    order => {
-
-      const building =
-        String(
-          order.building ||
-          "Unspecified"
-        )
-          .trim();
-
-
-      if (
-        !groups[building]
-      ) {
-
-        groups[building] =
-          [];
-
-      }
-
-
-      groups[building]
-        .push(
-          order
-        );
-
-    }
-  );
-
-
-  return Object
-    .keys(
-      groups
-    )
-    .sort(
-      (
-        a,
-        b
-      ) =>
-        a.localeCompare(
-          b,
-          undefined,
-          {
-            numeric:
-              true
-          }
-        )
-    )
-    .map(
-      building => ({
-
-        building:
-          building,
+        dateKey:
+          dateKey,
 
         orders:
-          groups[building]
+          []
 
-      })
-    );
+      };
+
+    }
+
+
+    dayMap[dateKey]
+      .orders
+      .push(order);
+
+  });
+
+
+  return Object
+    .values(dayMap)
+    .sort(
+      (a, b) =>
+        a.dateKey.localeCompare(
+          b.dateKey
+        )
+    )
+    .map(day => {
+
+      const slotMap = {};
+
+
+      day.orders.forEach(order => {
+
+        const info =
+          slotInfo(
+            order.deliverySlot
+          );
+
+
+        const key =
+          String(
+            info.sort
+          );
+
+
+        if (!slotMap[key]) {
+
+          slotMap[key] = {
+
+            sort:
+              info.sort,
+
+            label:
+              info.label,
+
+            orders:
+              []
+
+          };
+
+        }
+
+
+        slotMap[key]
+          .orders
+          .push(order);
+
+      });
+
+
+      const slots =
+        Object
+          .values(slotMap)
+          .sort(
+            (a, b) =>
+              a.sort -
+              b.sort
+          )
+          .map(slot => {
+
+            const buildingMap = {};
+
+
+            slot.orders.forEach(
+              order => {
+
+                const building =
+                  String(
+                    order.building ||
+                    "Unspecified"
+                  ).trim();
+
+
+                if (
+                  !buildingMap[
+                    building
+                  ]
+                ) {
+
+                  buildingMap[
+                    building
+                  ] = [];
+
+                }
+
+
+                buildingMap[
+                  building
+                ].push(order);
+
+              }
+            );
+
+
+            const buildings =
+              Object
+                .keys(buildingMap)
+                .sort(
+                  (a, b) =>
+                    a.localeCompare(
+                      b,
+                      undefined,
+                      {
+                        numeric:
+                          true
+                      }
+                    )
+                )
+                .map(
+                  building => ({
+
+                    building:
+                      building,
+
+                    orders:
+                      buildingMap[
+                        building
+                      ]
+
+                  })
+                );
+
+
+            return {
+
+              ...slot,
+
+              buildings:
+                buildings
+
+            };
+
+          });
+
+
+      return {
+
+        ...day,
+
+        slots:
+          slots
+
+      };
+
+    });
 
 }
 
 
-function groupByCustomer(
-  list
+function formatDayLabel(
+  dateKey
 ) {
 
-  const groups =
-    {};
+  if (
+    !dateKey ||
+    dateKey === "unknown"
+  ) {
+
+    return "Unknown Date";
+
+  }
 
 
-  list.forEach(
-    order => {
-
-      const key =
-        [
-          order.apartment ||
-            "",
-
-          order.phone ||
-            "",
-
-          order.name ||
-            ""
-
-        ]
-          .join("|")
-          .toLowerCase();
+  const parts =
+    dateKey.split("-");
 
 
-      if (
-        !groups[key]
-      ) {
+  if (
+    parts.length !== 3
+  ) {
 
-        groups[key] =
-          [];
+    return dateKey;
 
-      }
+  }
 
 
-      groups[key]
-        .push(
-          order
-        );
+  const date =
+    new Date(
+      Number(parts[0]),
+      Number(parts[1]) - 1,
+      Number(parts[2])
+    );
 
+
+  return date.toLocaleDateString(
+    "en-US",
+    {
+      weekday:
+        "long",
+
+      month:
+        "short",
+
+      day:
+        "numeric",
+
+      year:
+        "numeric"
     }
   );
-
-
-  return Object
-    .values(
-      groups
-    )
-    .sort(
-      (
-        a,
-        b
-      ) => {
-
-        const apartmentA =
-          String(
-            a[0].apartment ||
-            ""
-          );
-
-
-        const apartmentB =
-          String(
-            b[0].apartment ||
-            ""
-          );
-
-
-        return apartmentA
-          .localeCompare(
-            apartmentB,
-            undefined,
-            {
-              numeric:
-                true
-            }
-          );
-
-      }
-    );
 
 }
 
 
 /* =========================================================
-   DELIVERY
+   DELIVERY VIEW
 ========================================================= */
 
 function renderDelivery() {
@@ -936,54 +873,37 @@ function renderDelivery() {
       "No active deliveries";
 
 
-    container.innerHTML = `
-
-      <div class="empty-state">
-
-        <div class="empty-icon">
-          🚚
-        </div>
-
-        <h2>
-          No active deliveries
-        </h2>
-
-        <p>
-          There are currently no
-          active orders for this account.
-        </p>
-
-      </div>
-
-    `;
+    container.innerHTML =
+      emptyState(
+        "🚚",
+        "No active deliveries",
+        session.user.role ===
+          "admin"
+          ? "There are no active orders."
+          : "There are no active orders assigned to you today."
+      );
 
     return;
 
   }
 
 
-  const slots =
-    groupBySlot(
-      orders
-    );
-
-
-  const customerKeys =
+  const customerSet =
     new Set(
       orders.map(
         order =>
           [
-            order.building ||
-              "",
-
-            order.apartment ||
-              "",
-
-            order.phone ||
-              ""
-
+            order.building,
+            order.apartment,
+            order.phone
           ].join("|")
       )
+    );
+
+
+  const days =
+    groupOrders(
+      orders
     );
 
 
@@ -993,59 +913,191 @@ function renderDelivery() {
         orders.length === 1
           ? "order"
           : "orders"
-      } · ` +
-      `${customerKeys.size} ${
-        customerKeys.size === 1
+      } · ${
+        customerSet.size
+      } ${
+        customerSet.size === 1
           ? "customer"
           : "customers"
-      } · ` +
-      `${slots.length} ${
-        slots.length === 1
-          ? "slot"
-          : "slots"
       }`;
 
 
   container.innerHTML =
-    slots
+    days
       .map(
-        renderSlot
+        day =>
+          renderDay(
+            day,
+            "delivery"
+          )
       )
       .join("");
 
 }
 
 
-function renderSlot(
-  slot
+/* =========================================================
+   SUPPLY VIEW
+========================================================= */
+
+function renderSupply() {
+
+  const container =
+    $("supplyList");
+
+
+  if (!supply.length) {
+
+    container.innerHTML =
+      emptyState(
+        "🏭",
+        "Nothing to prepare",
+        session.user.role ===
+          "admin"
+          ? "There are no active orders."
+          : "There are no active orders assigned to you today."
+      );
+
+    return;
+
+  }
+
+
+  const days =
+    groupOrders(
+      supply
+    );
+
+
+  container.innerHTML =
+    days
+      .map(
+        day =>
+          renderDay(
+            day,
+            "supply"
+          )
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   DAY
+========================================================= */
+
+function renderDay(
+  day,
+  mode
 ) {
 
   const total =
-    slot.orders
-      .reduce(
-        (
-          sum,
-          order
-        ) =>
-          sum +
-          Number(
-            order.total ||
-            0
-          ),
-        0
-      );
-
-
-  const buildings =
-    groupByBuilding(
-      slot.orders
+    day.orders.reduce(
+      (sum, order) =>
+        sum +
+        Number(
+          order.total || 0
+        ),
+      0
     );
 
 
   return `
 
     <section
-      class="slot-section"
+      class="day-section"
+    >
+
+      <div
+        class="day-header"
+      >
+
+        <div>
+
+          <div
+            class="day-title"
+          >
+            📅
+            ${escapeHtml(
+              formatDayLabel(
+                day.dateKey
+              )
+            )}
+          </div>
+
+          <div
+            class="day-subtitle"
+          >
+            ${day.orders.length}
+            ${
+              day.orders.length === 1
+                ? "order"
+                : "orders"
+            }
+          </div>
+
+        </div>
+
+
+        <div
+          class="day-total"
+        >
+          ${money(total)}
+        </div>
+
+      </div>
+
+
+      <div
+        class="day-content"
+      >
+
+        ${
+          day.slots
+            .map(
+              slot =>
+                renderSlot(
+                  slot,
+                  mode
+                )
+            )
+            .join("")
+        }
+
+      </div>
+
+    </section>
+
+  `;
+
+}
+
+
+/* =========================================================
+   SLOT
+========================================================= */
+
+function renderSlot(
+  slot,
+  mode
+) {
+
+  const total =
+    slot.orders.reduce(
+      (sum, order) =>
+        sum +
+        Number(
+          order.total || 0
+        ),
+      0
+    );
+
+
+  return `
+
+    <section
+      class="slot-block"
     >
 
       <div
@@ -1059,7 +1111,8 @@ function renderSlot(
           >
             🕐
             ${escapeHtml(
-              slot.label
+              slot.label ||
+              "No Delivery Slot"
             )}
           </div>
 
@@ -1069,8 +1122,8 @@ function renderSlot(
             ${slot.orders.length}
             ${
               slot.orders.length === 1
-                ? "delivery"
-                : "deliveries"
+                ? "order"
+                : "orders"
             }
           </div>
 
@@ -1091,9 +1144,13 @@ function renderSlot(
       >
 
         ${
-          buildings
+          slot.buildings
             .map(
-              renderBuilding
+              building =>
+                renderBuilding(
+                  building,
+                  mode
+                )
             )
             .join("")
         }
@@ -1112,28 +1169,18 @@ function renderSlot(
 ========================================================= */
 
 function renderBuilding(
-  group
+  group,
+  mode
 ) {
 
   const total =
-    group.orders
-      .reduce(
-        (
-          sum,
-          order
-        ) =>
-          sum +
-          Number(
-            order.total ||
-            0
-          ),
-        0
-      );
-
-
-  const customers =
-    groupByCustomer(
-      group.orders
+    group.orders.reduce(
+      (sum, order) =>
+        sum +
+        Number(
+          order.total || 0
+        ),
+      0
     );
 
 
@@ -1143,7 +1190,7 @@ function renderBuilding(
       class="building-card"
     >
 
-      <header
+      <div
         class="building-header"
       >
 
@@ -1161,11 +1208,11 @@ function renderBuilding(
           <div
             class="building-subtitle"
           >
-            ${customers.length}
+            ${group.orders.length}
             ${
-              customers.length === 1
-                ? "customer"
-                : "customers"
+              group.orders.length === 1
+                ? "order"
+                : "orders"
             }
           </div>
 
@@ -1178,17 +1225,21 @@ function renderBuilding(
           ${money(total)}
         </div>
 
-      </header>
+      </div>
 
 
       <div
-        class="customers"
+        class="building-orders"
       >
 
         ${
-          customers
+          group.orders
             .map(
-              renderCustomer
+              order =>
+                renderOrder(
+                  order,
+                  mode
+                )
             )
             .join("")
         }
@@ -1203,123 +1254,12 @@ function renderBuilding(
 
 
 /* =========================================================
-   CUSTOMER
-========================================================= */
-
-function renderCustomer(
-  ordersForCustomer
-) {
-
-  const first =
-    ordersForCustomer[0];
-
-
-  const total =
-    ordersForCustomer
-      .reduce(
-        (
-          sum,
-          order
-        ) =>
-          sum +
-          Number(
-            order.total ||
-            0
-          ),
-        0
-      );
-
-
-  return `
-
-    <div
-      class="customer-card"
-    >
-
-      <div
-        class="customer-header"
-      >
-
-        <div>
-
-          <div
-            class="customer-name"
-          >
-            ${escapeHtml(
-              first.name ||
-              "Customer"
-            )}
-          </div>
-
-          <div
-            class="customer-apartment"
-          >
-            Apartment
-            ${escapeHtml(
-              first.apartment ||
-              "-"
-            )}
-          </div>
-
-          ${
-            first.phone
-              ? `
-
-                <a
-                  class="phone"
-                  href="tel:${escapeHtml(
-                    first.phone
-                  )}"
-                >
-                  📞
-                  ${escapeHtml(
-                    first.phone
-                  )}
-                </a>
-
-              `
-              : ""
-          }
-
-        </div>
-
-
-        <div
-          class="customer-total"
-        >
-          ${money(total)}
-        </div>
-
-      </div>
-
-
-      <div
-        class="customer-orders"
-      >
-
-        ${
-          ordersForCustomer
-            .map(
-              renderOrder
-            )
-            .join("")
-        }
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
    ORDER
 ========================================================= */
 
 function renderOrder(
-  order
+  order,
+  mode
 ) {
 
   const isAdmin =
@@ -1333,16 +1273,7 @@ function renderOrder(
     String(
       order.deliveryMan ||
       ""
-    )
-      .trim();
-
-
-  const items =
-    Array.isArray(
-      order.items
-    )
-      ? order.items
-      : [];
+    ).trim();
 
 
   return `
@@ -1360,17 +1291,55 @@ function renderOrder(
           <div
             class="order-id"
           >
-            Order
             ${escapeHtml(
               order.orderId
             )}
           </div>
 
 
+          <div
+            class="customer-name"
+          >
+            ${escapeHtml(
+              order.name ||
+              "Customer"
+            )}
+          </div>
+
+
+          <div
+            class="customer-apartment"
+          >
+            Apartment
+            ${escapeHtml(
+              order.apartment ||
+              "-"
+            )}
+          </div>
+
+
+          ${
+            order.phone
+              ? `
+                <a
+                  class="phone"
+                  href="tel:${escapeHtml(
+                    order.phone
+                  )}"
+                >
+                  📞
+                  ${escapeHtml(
+                    order.phone
+                  )}
+                </a>
+              `
+              : ""
+          }
+
+
           ${
             isAdmin
               ? `
-
                 <div
                   class="
                     assignment
@@ -1381,18 +1350,15 @@ function renderOrder(
                     }
                   "
                 >
-
                   ${
                     assigned
-                      ? "👤 " +
+                      ? "👤 Assigned to " +
                         escapeHtml(
                           assigned
                         )
                       : "⚠ Unassigned"
                   }
-
                 </div>
-
               `
               : ""
           }
@@ -1411,38 +1377,30 @@ function renderOrder(
       </div>
 
 
-      <div
-        class="order-meta"
-      >
+      ${
+        mode === "delivery"
+          ? `
+            <div
+              class="order-meta"
+            >
 
-        ${
-          order.deliveryType
-            ? `
-              <span>
-                🚚
-                ${escapeHtml(
-                  order.deliveryType
-                )}
-              </span>
-            `
-            : ""
-        }
+              ${
+                order.deliveryType
+                  ? `
+                    <span>
+                      🚚
+                      ${escapeHtml(
+                        order.deliveryType
+                      )}
+                    </span>
+                  `
+                  : ""
+              }
 
-
-        ${
-          order.deliveryDate
-            ? `
-              <span>
-                📅
-                ${escapeHtml(
-                  order.deliveryDate
-                )}
-              </span>
-            `
-            : ""
-        }
-
-      </div>
+            </div>
+          `
+          : ""
+      }
 
 
       <div
@@ -1450,8 +1408,9 @@ function renderOrder(
       >
 
         ${
-          items.length
-            ? items
+          order.items &&
+          order.items.length
+            ? order.items
                 .map(
                   item => `
 
@@ -1460,7 +1419,6 @@ function renderOrder(
                     >
 
                       <span>
-
                         ${Number(
                           item.quantity ||
                           0
@@ -1470,7 +1428,6 @@ function renderOrder(
                           item.product ||
                           "Product"
                         )}
-
                       </span>
 
                     </div>
@@ -1482,7 +1439,7 @@ function renderOrder(
               <div
                 class="no-items"
               >
-                No active items
+                No items found
               </div>
             `
         }
@@ -1497,158 +1454,34 @@ function renderOrder(
 
 
 /* =========================================================
-   SUPPLY
+   EMPTY
 ========================================================= */
 
-function renderSupply() {
+function emptyState(
+  icon,
+  title,
+  text
+) {
 
-  const container =
-    $("supplyList");
-
-
-  if (!supply.length) {
-
-    container.innerHTML = `
-
-      <div
-        class="empty-state"
-      >
-
-        <div
-          class="empty-icon"
-        >
-          🏭
-        </div>
-
-        <h2>
-          Nothing to prepare
-        </h2>
-
-        <p>
-          There are no active
-          order items.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const totalUnits =
-    supply.reduce(
-      (
-        sum,
-        item
-      ) =>
-        sum +
-        Number(
-          item.quantity ||
-          0
-        ),
-      0
-    );
-
-
-  container.innerHTML = `
+  return `
 
     <div
-      class="supply-summary"
-    >
-
-      <strong>
-        ${supply.length}
-        ${
-          supply.length === 1
-            ? "product"
-            : "products"
-        }
-      </strong>
-
-      <span>
-        ${totalUnits}
-        total units
-      </span>
-
-    </div>
-
-
-    <div
-      class="supply-card"
+      class="empty-state"
     >
 
       <div
-        class="supply-header"
+        class="empty-icon"
       >
-
-        <span>
-          Product
-        </span>
-
-        <span>
-          Required
-        </span>
-
+        ${icon}
       </div>
 
+      <h2>
+        ${escapeHtml(title)}
+      </h2>
 
-      ${
-        supply
-          .map(
-            item => `
-
-              <div
-                class="supply-row"
-              >
-
-                <div>
-
-                  <div
-                    class="supply-product"
-                  >
-                    ${escapeHtml(
-                      item.product
-                    )}
-                  </div>
-
-                  <div
-                    class="supply-orders"
-                  >
-                    ${Number(
-                      item.orders ||
-                      0
-                    )}
-                    ${
-                      Number(
-                        item.orders ||
-                        0
-                      ) === 1
-                        ? "order"
-                        : "orders"
-                    }
-                  </div>
-
-                </div>
-
-
-                <div
-                  class="supply-quantity"
-                >
-                  ${Number(
-                    item.quantity ||
-                    0
-                  )}
-                </div>
-
-              </div>
-
-            `
-          )
-          .join("")
-      }
+      <p>
+        ${escapeHtml(text)}
+      </p>
 
     </div>
 
