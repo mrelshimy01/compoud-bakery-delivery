@@ -1,4 +1,4 @@
-const CACHE = "moharambake-delivery-v4.4-install";
+const CACHE = "moharambake-delivery-v4.5-icon";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
