@@ -1,4 +1,4 @@
-# MoharamBake Delivery App — v4.1
+# MoharamBake Delivery App — v4.2
 
 ## What changed
 
@@ -19,7 +19,7 @@
   Day → Time Slot → consolidated products.
 
 ### Caching
-- `index.html` loads `app.js?v=4.1.0`.
+- `index.html` loads `app.js?v=4.2.0`.
 - Service-worker cache is bumped to v3.
 - Google Apps Script API responses are not cached.
 
@@ -59,3 +59,12 @@ The backend detects these columns by header name and does not depend on their ex
 ## Admin
 
 Admin can still view active orders, but cannot mark them delivered from this UI.
+
+
+## v4.2 — Admin Mark as Delivered
+
+- Admin accounts can now use **Mark as Delivered** on active orders.
+- Delivery users remain restricted to orders assigned to them.
+- The backend still changes only the `Status` cell to `Delivered`.
+- Admin can mark any active order, regardless of delivery-man assignment.
+- Frontend and service-worker cache versions were bumped to ensure the new button/behavior loads.

@@ -9,7 +9,7 @@
  * Supply: Day -> Slot -> consolidated product quantities.
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxcBrqwdle_vBHWxY0_rav6bQ9Soz4_MW9MeI197RtrPlcRZynkvjM8xVO4RB42eAGY7g/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyJUpdJ87zyVgUXrqXxh19EWCn_gFD2zj62bClt9BzGZT2Dpw02krNWQncduOwQvR-yFQ/exec";
 
 const SESSION_KEY = "moharambake_delivery_session";
 
@@ -245,15 +245,6 @@ async function apiMarkDelivered(orderId) {
 
     throw new Error(
       "Authentication required."
-    );
-
-  }
-
-
-  if (isAdmin()) {
-
-    throw new Error(
-      "Admin accounts cannot mark deliveries as delivered."
     );
 
   }
@@ -1858,28 +1849,20 @@ function renderOrder(
       </div>
 
 
-      ${
-        !isAdmin()
-          ? `
+      <div class="delivery-action">
 
-            <div class="delivery-action">
+        <button
+          class="delivered-btn"
+          type="button"
+          data-action="mark-delivered"
+          data-order-id="${escapeHtml(
+            order.orderId || ""
+          )}"
+        >
+          ✓ Mark as Delivered
+        </button>
 
-              <button
-                class="delivered-btn"
-                type="button"
-                data-action="mark-delivered"
-                data-order-id="${escapeHtml(
-                  order.orderId || ""
-                )}"
-              >
-                ✓ Mark as Delivered
-              </button>
-
-            </div>
-
-          `
-          : ""
-      }
+      </div>
 
     </article>
 
@@ -2743,17 +2726,6 @@ async function markOrderDelivered(
 
     toast(
       "Order ID is missing."
-    );
-
-    return;
-
-  }
-
-
-  if (isAdmin()) {
-
-    toast(
-      "Admin accounts cannot mark deliveries as delivered."
     );
 
     return;

@@ -470,14 +470,14 @@ function verifyToken(token) {
 /* =========================================================
    MARK ORDER DELIVERED
    ---------------------------------------------------------
-   Delivery users only.
+   Delivery users and Admin can mark orders as delivered.
 
    Security rules:
    1. Token must be valid.
-   2. User must have role "delivery".
-   3. Order must exist.
-   4. Order must currently be "Active".
-   5. Order must be assigned to the logged-in delivery user.
+   2. Order must exist.
+   3. Order must currently be "Active".
+   4. Delivery users must be assigned to the order.
+   5. Admin can update any active order.
    6. Only the Status cell is changed to "Delivered".
 ========================================================= */
 
@@ -488,17 +488,6 @@ function markOrderDelivered(
 
   const user =
     verifyToken(token);
-
-
-  if (
-    user.role !== "delivery"
-  ) {
-
-    throw new Error(
-      "Only delivery users can mark orders as delivered."
-    );
-
-  }
 
 
   const id =
@@ -744,7 +733,12 @@ function markOrderDelivered(
       ).trim();
 
 
+    /*
+     * Delivery users may only mark their own assigned orders.
+     * Admin may mark any active order.
+     */
     if (
+      user.role !== "admin" &&
       !deliveryMatchesUser(
         assigned,
         user
