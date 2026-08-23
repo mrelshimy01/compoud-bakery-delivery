@@ -13,7 +13,7 @@
  */
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbyh5IDscnB-kY3NVxjwm2V93exvuUS65uv2brDBosAXrmSl96xbnUf9ZpsGq9dzC5BKrg/exec";
+  "https://script.google.com/macros/s/AKfycbyJUpdJ87zyVgUXrqXxh19EWCn_gFD2zj62bClt9BzGZT2Dpw02krNWQncduOwQvR-yFQ/exec";
 
 const SESSION_KEY =
   "moharambake_delivery_session";
