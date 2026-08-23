@@ -66,7 +66,7 @@ function doGet(e) {
   return jsonResponse({
     ok: true,
     service: "MoharamBake Delivery API",
-    version: "4.0"
+    version: "4.3-admin-delivered"
   });
 
 }
@@ -734,11 +734,16 @@ function markOrderDelivered(
 
 
     /*
-     * Delivery users may only mark their own assigned orders.
-     * Admin may mark any active order.
+     * AUTHORIZATION:
+     *
+     * ADMIN: may mark ANY active order as Delivered.
+     * DELIVERY: may mark ONLY an order assigned to that user.
      */
+    const isAdmin =
+      String(user.role || "").toLowerCase() === "admin";
+
     if (
-      user.role !== "admin" &&
+      !isAdmin &&
       !deliveryMatchesUser(
         assigned,
         user
@@ -778,7 +783,13 @@ function markOrderDelivered(
         id,
 
       status:
-        "Delivered"
+        "Delivered",
+
+      updatedBy:
+        user.name,
+
+      updatedByRole:
+        user.role
 
     };
 

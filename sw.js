@@ -1,4 +1,4 @@
-const CACHE = "moharambake-delivery-v4-admin-delivered";
+const CACHE = "moharambake-delivery-v4.4-install";
 
 self.addEventListener("install", event => {
   self.skipWaiting();

@@ -68,3 +68,18 @@ Admin can still view active orders, but cannot mark them delivered from this UI.
 - The backend still changes only the `Status` cell to `Delivered`.
 - Admin can mark any active order, regardless of delivery-man assignment.
 - Frontend and service-worker cache versions were bumped to ensure the new button/behavior loads.
+
+
+## v4.3 — Admin Delivered Authorization Fix
+
+The Apps Script authorization for `markDelivered` explicitly allows the `admin` role to mark any active order as `Delivered`, while delivery users remain restricted to their assigned orders. Deploy the updated Apps Script as a new version.
+
+## v4.4 — Phone Install Button
+
+The login page now includes **Download on your phone**.
+
+- Android / Chrome: uses the native `beforeinstallprompt` install flow when available.
+- iPhone / iPad: shows Safari instructions for Share → Add to Home Screen.
+- Other browsers: shows generic installation guidance.
+- Added 192px and 512px PNG manifest icons and an Apple touch icon to improve PWA installation support.
+- Backend behavior is unchanged from v4.3.

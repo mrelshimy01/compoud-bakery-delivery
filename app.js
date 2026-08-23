@@ -9,13 +9,14 @@
  * Supply: Day -> Slot -> consolidated product quantities.
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxzyBEka_UbcVfVnLHxUb2mndYFN4AKhrnQCR17Rzo1VcBA1HziUCu27WMAKMJAYWbN5w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyJUpdJ87zyVgUXrqXxh19EWCn_gFD2zj62bClt9BzGZT2Dpw02krNWQncduOwQvR-yFQ/exec";
 
 const SESSION_KEY = "moharambake_delivery_session";
 
 let session = null;
 let orders = [];
 let currentView = "delivery";
+let deferredInstallPrompt = null;
 
 const $ = id => document.getElementById(id);
 
@@ -2807,10 +2808,169 @@ async function markOrderDelivered(
 
 
 /* =========================================================
+   PHONE INSTALL
+========================================================= */
+
+function isIOS() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+
+function isAndroid() {
+  return /android/i.test(navigator.userAgent);
+}
+
+
+function isStandalone() {
+  return window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+}
+
+
+function closeInstallHelp() {
+  const modal = $("installHelp");
+
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+}
+
+
+function showInstallHelp() {
+  const modal = $("installHelp");
+  const text = $("installHelpText");
+  const steps = $("installHelpSteps");
+
+  if (!modal || !text || !steps) return;
+
+  if (isIOS()) {
+    text.textContent =
+      "On iPhone or iPad, use Safari to add MoharamBake to your Home Screen.";
+
+    steps.innerHTML = `
+      <li>Open this page in <strong>Safari</strong>.</li>
+      <li>Tap the <strong>Share</strong> button in Safari.</li>
+      <li>Scroll down and choose <strong>Add to Home Screen</strong>.</li>
+      <li>Tap <strong>Add</strong>. MoharamBake will appear like an app on your Home Screen.</li>
+    `;
+  } else if (isAndroid()) {
+    text.textContent =
+      "If Android did not show the install prompt automatically, use Chrome's menu to install the app.";
+
+    steps.innerHTML = `
+      <li>Open this page in <strong>Google Chrome</strong>.</li>
+      <li>Tap the <strong>⋮ menu</strong> in the top-right corner.</li>
+      <li>Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li>
+      <li>Confirm the installation.</li>
+    `;
+  } else {
+    text.textContent =
+      "You can install MoharamBake from your browser when installation is supported.";
+
+    steps.innerHTML = `
+      <li>Open the browser menu.</li>
+      <li>Choose <strong>Install MoharamBake</strong> or <strong>Add to Home Screen</strong>.</li>
+      <li>Confirm the installation.</li>
+    `;
+  }
+
+  modal.classList.remove("hidden");
+}
+
+
+async function installApp() {
+
+  if (isStandalone()) {
+    toast("MoharamBake is already installed on this device.");
+    return;
+  }
+
+  /* Android / Chrome: use the native install prompt when available. */
+  if (deferredInstallPrompt) {
+    try {
+      deferredInstallPrompt.prompt();
+
+      const result = await deferredInstallPrompt.userChoice;
+
+      if (result && result.outcome === "accepted") {
+        toast("Installing MoharamBake…");
+      }
+    } catch (error) {
+      console.warn("Install prompt failed", error);
+      showInstallHelp();
+    } finally {
+      deferredInstallPrompt = null;
+    }
+
+    return;
+  }
+
+  /* iOS has no beforeinstallprompt API, so show the native steps. */
+  showInstallHelp();
+}
+
+
+function setupInstallPrompt() {
+
+  const installButton = $("installAppButton");
+  const closeButton = $("installHelpClose");
+  const modal = $("installHelp");
+
+  if (installButton) {
+    installButton.addEventListener(
+      "click",
+      installApp
+    );
+  }
+
+  if (closeButton) {
+    closeButton.addEventListener(
+      "click",
+      closeInstallHelp
+    );
+  }
+
+  if (modal) {
+    modal.addEventListener(
+      "click",
+      event => {
+        if (event.target === modal) {
+          closeInstallHelp();
+        }
+      }
+    );
+  }
+
+  window.addEventListener(
+    "beforeinstallprompt",
+    event => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+    }
+  );
+
+  window.addEventListener(
+    "appinstalled",
+    () => {
+      deferredInstallPrompt = null;
+      closeInstallHelp();
+      toast("MoharamBake installed successfully.");
+    }
+  );
+
+  if (isStandalone() && installButton) {
+    installButton.classList.add("hidden");
+  }
+}
+
+
+/* =========================================================
    EVENTS
 ========================================================= */
 
 function setupEvents() {
+
 
   $("loginForm")
     .addEventListener(
@@ -2895,6 +3055,8 @@ function setupEvents() {
 ========================================================= */
 
 async function init() {
+
+  setupInstallPrompt();
 
   setupEvents();
 

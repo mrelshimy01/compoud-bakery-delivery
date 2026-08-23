@@ -7,6 +7,10 @@
   <meta name="description" content="MoharamBake delivery and supply dashboard">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MoharamBake">
   <link rel="stylesheet" href="styles.css">
   <title>MoharamBake · Delivery</title>
 </head>
@@ -35,10 +39,26 @@
             Login
           </button>
 
+          <button id="installAppButton" class="install-app-btn full" type="button">
+            📲 Download on your phone
+          </button>
+
           <div id="loginError" class="error"></div>
         </form>
       </div>
     </section>
+
+    <div id="installHelp" class="install-help hidden" role="dialog" aria-modal="true" aria-labelledby="installHelpTitle">
+      <div class="install-help-card">
+        <div class="eyebrow">MOHARAMBAKE APP</div>
+        <h3 id="installHelpTitle">Install MoharamBake on your phone</h3>
+        <p id="installHelpText"></p>
+        <ol id="installHelpSteps"></ol>
+        <div class="install-help-actions">
+          <button id="installHelpClose" class="ghost-btn" type="button">Close</button>
+        </div>
+      </div>
+    </div>
 
     <section id="appScreen" class="app-screen hidden">
 
@@ -101,6 +121,6 @@
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </div>
 
-  <script src="app.js?v=4.2.0"></script>
+  <script src="app.js?v=4.4.0"></script>
 </body>
 </html>
