@@ -1779,3 +1779,108 @@ a:focus-visible {
   }
 
 }
+
+
+/* =========================================================
+   DELIVERY ACTION - MARK AS DELIVERED
+========================================================= */
+
+.delivery-action {
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin-top: 14px;
+
+  padding-top: 12px;
+
+  border-top:
+    1px solid
+    var(--line);
+}
+
+.delivered-btn {
+  min-height: 44px;
+
+  padding:
+    10px 16px;
+
+  border:
+    1px solid
+    var(--green);
+
+  border-radius: 12px;
+
+  background:
+    var(--green-soft);
+
+  color:
+    var(--green);
+
+  font-size: 13px;
+
+  font-weight: 900;
+
+  cursor: pointer;
+
+  transition:
+    transform .15s ease,
+    background .15s ease,
+    box-shadow .15s ease;
+}
+
+.delivered-btn:hover {
+  transform:
+    translateY(-1px);
+
+  background:
+    #dff4e7;
+
+  box-shadow:
+    0 4px 12px
+    rgba(31, 138, 82, .12);
+}
+
+.delivered-btn:active {
+  transform:
+    translateY(0);
+}
+
+.delivered-btn:disabled {
+  cursor:
+    wait;
+
+  opacity:
+    .7;
+
+  transform:
+    none;
+
+  box-shadow:
+    none;
+}
+
+.delivered-btn.is-loading {
+  position: relative;
+}
+
+
+/* Keep the action easy to tap on phones. */
+
+@media (max-width: 700px) {
+
+  .delivery-action {
+    margin-top: 12px;
+
+    padding-top: 11px;
+  }
+
+  .delivered-btn {
+    width: 100%;
+
+    min-height: 48px;
+
+    font-size: 14px;
+  }
+
+}

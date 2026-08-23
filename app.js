@@ -1,6 +1,7 @@
 /*
  * MoharamBake Delivery / Supply PWA
- * READ ONLY - never writes to Google Sheets.
+ * Delivery users can mark their assigned orders as Delivered.
+ * The Apps Script backend performs the authenticated Sheet update.
  *
  * Delivery users: today's active orders assigned to them.
  * Admin: all active orders.
@@ -225,6 +226,88 @@ async function apiLogin(
     throw new Error(
       data.error ||
       "Invalid login."
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+async function apiMarkDelivered(orderId) {
+
+  if (
+    !session ||
+    !session.token
+  ) {
+
+    throw new Error(
+      "Authentication required."
+    );
+
+  }
+
+
+  if (isAdmin()) {
+
+    throw new Error(
+      "Admin accounts cannot mark deliveries as delivered."
+    );
+
+  }
+
+
+  const response =
+    await fetch(
+      API_URL,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
+
+        body:
+          JSON.stringify({
+
+            action:
+              "markDelivered",
+
+            token:
+              session.token,
+
+            orderId:
+              orderId
+
+          }),
+
+        cache:
+          "no-store"
+      }
+    );
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      `Could not update order (${response.status}).`
+    );
+
+  }
+
+
+  const data =
+    await response.json();
+
+
+  if (!data.ok) {
+
+    throw new Error(
+      data.error ||
+      "Unable to mark order as delivered."
     );
 
   }
@@ -1774,6 +1857,30 @@ function renderOrder(
 
       </div>
 
+
+      ${
+        !isAdmin()
+          ? `
+
+            <div class="delivery-action">
+
+              <button
+                class="delivered-btn"
+                type="button"
+                data-action="mark-delivered"
+                data-order-id="${escapeHtml(
+                  order.orderId || ""
+                )}"
+              >
+                ✓ Mark as Delivered
+              </button>
+
+            </div>
+
+          `
+          : ""
+      }
+
     </article>
 
   `;
@@ -2618,6 +2725,116 @@ async function refreshData() {
 
 
 /* =========================================================
+   MARK ORDER DELIVERED
+========================================================= */
+
+async function markOrderDelivered(
+  orderId,
+  button
+) {
+
+  const id =
+    String(
+      orderId || ""
+    ).trim();
+
+
+  if (!id) {
+
+    toast(
+      "Order ID is missing."
+    );
+
+    return;
+
+  }
+
+
+  if (isAdmin()) {
+
+    toast(
+      "Admin accounts cannot mark deliveries as delivered."
+    );
+
+    return;
+
+  }
+
+
+  const confirmed =
+    window.confirm(
+      "Mark this order as delivered?"
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  button.disabled =
+    true;
+
+  button.classList.add(
+    "is-loading"
+  );
+
+  button.textContent =
+    "Updating...";
+
+
+  try {
+
+    await apiMarkDelivered(
+      id
+    );
+
+
+    toast(
+      "✓ Order marked as delivered."
+    );
+
+
+    /*
+     * The backend now returns only ACTIVE orders,
+     * so refreshing immediately removes the delivered
+     * order from the delivery list.
+     */
+
+    await refreshData();
+
+  } catch (error) {
+
+    console.error(
+      "Mark delivered error:",
+      error
+    );
+
+
+    button.disabled =
+      false;
+
+    button.classList.remove(
+      "is-loading"
+    );
+
+    button.textContent =
+      "✓ Mark as Delivered";
+
+
+    toast(
+      error.message ||
+      "Unable to mark order as delivered."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
    EVENTS
 ========================================================= */
 
@@ -2666,6 +2883,37 @@ function setupEvents() {
 
       }
     );
+
+
+  /*
+   * Event delegation keeps the button working after
+   * every Delivery refresh/render.
+   */
+
+  document.addEventListener(
+    "click",
+    function(event) {
+
+      const button =
+        event.target.closest(
+          '[data-action="mark-delivered"]'
+        );
+
+
+      if (!button) {
+
+        return;
+
+      }
+
+
+      markOrderDelivered(
+        button.dataset.orderId,
+        button
+      );
+
+    }
+  );
 
 }
 
