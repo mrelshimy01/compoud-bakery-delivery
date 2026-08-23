@@ -1,209 +1,1182 @@
 /* =========================================================
-   SUPPLY VIEW
-   Bakery pickup / preparation friendly layout
+   MOHARAMBAKE DELIVERY & SUPPLY
+   Complete stylesheet
 ========================================================= */
 
-.supply-product-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 14px;
-  background: #f8f5f1;
-}
-
-
-/* Individual product row */
-
-.supply-product-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-
-  min-height: 78px;
-  padding: 16px 18px;
-
-  background: #ffffff;
-  border: 1px solid #e8e0d8;
-  border-radius: 14px;
-
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.035);
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-
-.supply-product-row:hover {
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 5px 14px rgba(0, 0, 0, 0.07);
-}
-
-
-/* Product name */
-
-.supply-product-row > div:first-child {
-  flex: 1;
-  min-width: 0;
-}
-
-
-.supply-product-row strong:first-child {
-  display: block;
-
-  font-size: 17px;
-  line-height: 1.35;
-
-  color: #24201d;
-}
-
-
-/* "X orders" underneath product */
-
-.supply-product-sub {
-  margin-top: 5px;
-
-  font-size: 13px;
-  line-height: 1.3;
-
-  color: #8c7d72;
-}
-
-
-/* Large quantity */
-
-.supply-product-row > strong:last-child {
-  flex: 0 0 auto;
-
-  min-width: 58px;
-
-  text-align: center;
-
-  font-size: 30px;
-  line-height: 1;
-
-  color: #c35d35;
-
-  font-weight: 800;
+* {
+  box-sizing: border-box;
 }
 
 
 /* =========================================================
-   SUPPLY SLOT HEADER
+   VARIABLES
 ========================================================= */
 
-#supplyView .slot-block {
-  overflow: hidden;
+:root {
+  --navy: #101827;
+  --navy-2: #172235;
 
-  margin-bottom: 18px;
+  --cream: #f7f4f1;
+  --white: #ffffff;
 
-  background: #ffffff;
+  --ink: #211f1d;
+  --muted: #7d756e;
 
-  border: 1px solid #e7ded5;
+  --line: #e6ded7;
+
+  --orange: #bf5d35;
+  --orange-soft: #fae9de;
+
+  --green: #24864d;
+  --green-soft: #e7f5eb;
+
+  --red: #b83a2f;
+  --red-soft: #fde9e7;
+
+  --shadow:
+    0 8px 28px rgba(33, 31, 29, .07);
+
+  --shadow-small:
+    0 3px 12px rgba(33, 31, 29, .05);
+}
+
+
+/* =========================================================
+   BASE
+========================================================= */
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+
+  background: var(--cream);
+  color: var(--ink);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+/* =========================================================
+   APP SHELL
+========================================================= */
+
+.app-shell {
+  min-height: 100vh;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-screen {
+  min-height: 100vh;
+
+  display: grid;
+  place-items: center;
+
+  padding: 24px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      #ffffff 0,
+      transparent 40%
+    ),
+    var(--cream);
+}
+
+.login-card {
+  width: min(430px, 100%);
+
+  background: var(--white);
+
+  border: 1px solid var(--line);
+
+  border-radius: 24px;
+
+  padding: 34px;
+
+  box-shadow: var(--shadow);
+}
+
+.brand-mark {
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+  place-items: center;
+
   border-radius: 18px;
 
-  box-shadow:
-    0 3px 12px rgba(0, 0, 0, 0.045);
+  background: #f1f0ee;
+
+  font-size: 30px;
+
+  margin-bottom: 24px;
 }
 
+.login-card h1 {
+  margin: 4px 0 8px;
 
-#supplyView .slot-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  font-size: 38px;
 
-  padding: 18px 20px;
-
-  background: #f9e9de;
-
-  border-bottom: 1px solid #ead9ce;
+  letter-spacing: -1.2px;
 }
 
+.login-card form {
+  display: grid;
 
-#supplyView .slot-title {
-  font-size: 20px;
-  font-weight: 800;
+  gap: 16px;
 
-  color: #bd5a34;
+  margin-top: 26px;
 }
 
+label {
+  display: grid;
 
-#supplyView .slot-subtitle {
-  margin-top: 4px;
+  gap: 8px;
 
   font-size: 14px;
 
-  color: #806f64;
+  font-weight: 750;
 }
 
+input {
+  width: 100%;
 
-#supplyView .slot-total {
-  font-size: 20px;
-  font-weight: 800;
+  border:
+    1px solid
+    #d9d0c9;
 
-  color: #bd5a34;
+  border-radius: 14px;
+
+  padding:
+    14px
+    15px;
+
+  background: #fff;
+
+  color: var(--ink);
+
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--orange);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(191, 93, 53, .12);
 }
 
 
 /* =========================================================
-   SUPPLY DAY HEADER
+   BUTTONS
+========================================================= */
+
+.primary-btn,
+.refresh-btn,
+.nav-button {
+  border: 0;
+
+  border-radius: 14px;
+
+  font-weight: 800;
+}
+
+.primary-btn {
+  padding: 14px 18px;
+
+  background: var(--navy);
+
+  color: #fff;
+}
+
+.primary-btn:hover {
+  background: var(--navy-2);
+}
+
+.full {
+  width: 100%;
+}
+
+.error {
+  color: var(--red);
+
+  font-size: 13px;
+
+  min-height: 18px;
+}
+
+.ghost-btn {
+  border:
+    1px solid
+    var(--line);
+
+  background: #fff;
+
+  color: var(--ink);
+
+  border-radius: 12px;
+
+  padding:
+    10px
+    15px;
+
+  font-weight: 750;
+}
+
+.ghost-btn:hover {
+  background: #faf8f6;
+}
+
+
+/* =========================================================
+   MAIN APP
+========================================================= */
+
+.app-screen {
+  width: min(1280px, 100%);
+
+  margin: 0 auto;
+
+  padding:
+    22px
+    22px
+    70px;
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.brand-title {
+  font-size: 30px;
+
+  font-weight: 900;
+
+  letter-spacing: -1px;
+}
+
+.brand-subtitle {
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+.admin-label::after {
+  content: " · Admin";
+
+  color: var(--orange);
+}
+
+
+/* =========================================================
+   MAIN NAV
+========================================================= */
+
+.main-nav {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 8px;
+
+  margin-bottom: 16px;
+}
+
+.nav-button {
+  min-height: 52px;
+
+  border:
+    1px solid
+    var(--line);
+
+  background: #fff;
+
+  color: var(--ink);
+
+  font-size: 17px;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    transform .15s ease;
+}
+
+.nav-button:hover {
+  transform: translateY(-1px);
+
+  background: #faf8f6;
+}
+
+.nav-button.active {
+  background: var(--navy);
+
+  border-color: var(--navy);
+
+  color: #fff;
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.toolbar {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-bottom: 28px;
+}
+
+.refresh-btn {
+  padding:
+    11px
+    17px;
+
+  background: var(--navy);
+
+  color: #fff;
+
+  font-size: 15px;
+}
+
+.refresh-btn:hover {
+  background: var(--navy-2);
+}
+
+.updated-label {
+  color: var(--muted);
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+.loading {
+  padding:
+    12px
+    0;
+
+  color: var(--muted);
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+
+.section-heading {
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin:
+    2px
+    0
+    4px;
+
+  font-size: 30px;
+
+  letter-spacing: -.7px;
+}
+
+.eyebrow {
+  color: var(--orange);
+
+  font-size: 12px;
+
+  font-weight: 900;
+
+  letter-spacing: 1.8px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+
+/* =========================================================
+   DAY
+========================================================= */
+
+.day-section {
+  overflow: hidden;
+
+  margin:
+    0
+    0
+    24px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 20px;
+
+  background: #fff;
+
+  box-shadow: var(--shadow);
+}
+
+.day-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  padding:
+    20px
+    24px;
+
+  background: var(--navy);
+
+  color: #fff;
+}
+
+.day-title {
+  font-size: 23px;
+
+  font-weight: 900;
+
+  letter-spacing: -.4px;
+}
+
+.day-subtitle {
+  margin-top: 5px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      .7
+    );
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+.day-total {
+  font-size: 21px;
+
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+.day-content {
+  padding: 12px;
+
+  background: #f4f0ed;
+}
+
+
+/* =========================================================
+   DELIVERY SLOT
+========================================================= */
+
+.slot-block {
+  overflow: hidden;
+
+  margin-bottom: 12px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 16px;
+
+  background: #fff;
+}
+
+.slot-block:last-child {
+  margin-bottom: 0;
+}
+
+.slot-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  padding:
+    16px
+    20px;
+
+  background:
+    var(--orange-soft);
+
+  border-bottom:
+    1px solid
+    #edd7ca;
+}
+
+.slot-title {
+  color: var(--orange);
+
+  font-size: 18px;
+
+  font-weight: 900;
+}
+
+.slot-subtitle {
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+
+  font-weight: 650;
+}
+
+.slot-total {
+  color: var(--orange);
+
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   BUILDINGS
+========================================================= */
+
+.building-list {
+  padding: 10px;
+}
+
+.building-card {
+  overflow: hidden;
+
+  margin-bottom: 10px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 14px;
+
+  background: #fff;
+}
+
+.building-card:last-child {
+  margin-bottom: 0;
+}
+
+.building-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding:
+    15px
+    16px;
+
+  border-bottom:
+    1px solid
+    var(--line);
+}
+
+.building-title {
+  font-size: 18px;
+
+  font-weight: 900;
+}
+
+.building-subtitle {
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+.building-total {
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+.building-orders {
+  padding: 8px;
+
+  background: #faf9f7;
+}
+
+
+/* =========================================================
+   ORDER CARD
+========================================================= */
+
+.order-card {
+  padding: 16px;
+
+  margin-bottom: 8px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 13px;
+
+  background: #fff;
+
+  transition:
+    box-shadow .15s ease,
+    transform .15s ease;
+}
+
+.order-card:last-child {
+  margin-bottom: 0;
+}
+
+.order-card:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 4px 14px
+    rgba(33, 31, 29, .06);
+}
+
+.order-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 18px;
+}
+
+.order-id {
+  color: #948b84;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: .5px;
+}
+
+.customer-name {
+  margin-top: 3px;
+
+  font-size: 17px;
+
+  font-weight: 900;
+}
+
+.customer-apartment {
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+.phone {
+  display: inline-block;
+
+  margin-top: 7px;
+
+  color: var(--orange);
+
+  text-decoration: none;
+
+  font-weight: 800;
+}
+
+.phone:hover {
+  text-decoration: underline;
+}
+
+.order-price {
+  font-size: 18px;
+
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+.order-meta {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin-top: 12px;
+}
+
+.meta-pill,
+.assignment {
+  display: inline-flex;
+
+  align-items: center;
+
+  width: fit-content;
+
+  padding:
+    6px
+    9px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+.meta-pill {
+  background: #f3f2f0;
+
+  color: #665e58;
+}
+
+.assignment.assigned {
+  background:
+    var(--green-soft);
+
+  color:
+    var(--green);
+}
+
+.assignment.unassigned {
+  background:
+    var(--red-soft);
+
+  color:
+    var(--red);
+}
+
+.order-items {
+  display: grid;
+
+  gap: 8px;
+
+  margin-top: 13px;
+
+  padding-top: 12px;
+
+  border-top:
+    1px solid
+    var(--line);
+}
+
+.order-item {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  font-weight: 750;
+
+  font-size: 14px;
+}
+
+.no-items {
+  color: var(--muted);
+
+  font-size: 13px;
+
+  padding:
+    5px
+    0;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+  padding:
+    60px
+    20px;
+
+  text-align: center;
+
+  border:
+    1px dashed
+    #d6cbc3;
+
+  border-radius: 18px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .65
+    );
+}
+
+.empty-icon {
+  font-size: 42px;
+
+  margin-bottom: 10px;
+}
+
+.empty-state h2,
+.empty-state h3 {
+  margin:
+    0
+    0
+    6px;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: var(--muted);
+}
+
+
+/* =========================================================
+   SUPPLY VIEW
+   ---------------------------------------------------------
+   Supply structure:
+   Day
+      ↓
+   Delivery Slot
+      ↓
+   Consolidated Products
+
+   The Supply view is intentionally different from
+   Delivery. It is designed as a bakery preparation
+   checklist rather than a customer/order list.
+========================================================= */
+
+#supplyView {
+  width: 100%;
+}
+
+#supplyView .section-heading {
+  margin-bottom: 20px;
+}
+
+#supplyView .section-heading h2 {
+  font-size: 32px;
+}
+
+
+/* =========================================================
+   SUPPLY DAY
 ========================================================= */
 
 #supplyView .day-section {
   margin-bottom: 26px;
 
-  overflow: hidden;
-
-  border-radius: 20px;
-
-  background: #f1ece7;
+  border-radius: 22px;
 
   box-shadow:
-    0 5px 18px rgba(0, 0, 0, 0.055);
+    0 6px 22px
+    rgba(33, 31, 29, .07);
 }
-
 
 #supplyView .day-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 22px 24px;
-
-  background: #111b2b;
-
-  color: #ffffff;
+  padding:
+    22px
+    24px;
 }
-
 
 #supplyView .day-title {
-  font-size: 23px;
-  font-weight: 800;
-
-  line-height: 1.25;
+  font-size: 24px;
 }
-
 
 #supplyView .day-subtitle {
-  margin-top: 5px;
-
   font-size: 14px;
 
-  color: #c7ccd4;
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      .72
+    );
 }
-
-
-#supplyView .day-total {
-  font-size: 20px;
-  font-weight: 800;
-}
-
 
 #supplyView .day-content {
-  padding: 14px;
+  padding: 12px;
+
+  background:
+    #f1ece7;
+}
+
+
+/* =========================================================
+   SUPPLY SLOT
+========================================================= */
+
+#supplyView .slot-block {
+  margin-bottom: 14px;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 2px 8px
+    rgba(33, 31, 29, .035);
+}
+
+#supplyView .slot-header {
+  padding:
+    18px
+    20px;
+
+  background:
+    #fae9de;
+}
+
+#supplyView .slot-title {
+  font-size: 20px;
+}
+
+#supplyView .slot-subtitle {
+  margin-top: 5px;
+
+  font-size: 13px;
+}
+
+#supplyView .slot-total {
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   SUPPLY PRODUCT LIST
+========================================================= */
+
+.supply-slot-products {
+  padding: 10px;
+
+  background:
+    #f8f5f1;
+}
+
+
+/* =========================================================
+   SUPPLY PRODUCT ROW
+========================================================= */
+
+.supply-product {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 20px;
+
+  min-height: 78px;
+
+  padding:
+    16px
+    18px;
+
+  margin-bottom: 8px;
+
+  background: #fff;
+
+  border:
+    1px solid
+    #e8e0d8;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 2px 6px
+    rgba(0, 0, 0, .035);
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease;
+}
+
+.supply-product:last-child {
+  margin-bottom: 0;
+}
+
+.supply-product:hover {
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 5px 14px
+    rgba(0, 0, 0, .07);
+}
+
+
+/* =========================================================
+   SUPPLY PRODUCT NAME
+========================================================= */
+
+.supply-product-name {
+  display: block;
+
+  font-size: 17px;
+
+  line-height: 1.4;
+
+  font-weight: 850;
+
+  color: var(--ink);
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   SUPPLY PRODUCT META
+========================================================= */
+
+.supply-product-meta {
+  margin-top: 5px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+
+  line-height: 1.3;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   SUPPLY QUANTITY
+========================================================= */
+
+.supply-product-qty {
+  min-width: 70px;
+
+  padding:
+    7px
+    8px;
+
+  text-align: center;
+
+  font-size: 30px;
+
+  line-height: 1;
+
+  font-weight: 950;
+
+  color: var(--orange);
+
+  background:
+    #fff5ef;
+
+  border-radius: 12px;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+/* =========================================================
+   SUPPLY SUMMARY
+========================================================= */
+
+.supply-summary-box {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 12px;
+
+  padding:
+    14px
+    16px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 14px;
+
+  background: #fff;
+}
+
+.supply-summary-box strong {
+  font-size: 16px;
 }
 
 
@@ -212,53 +1185,227 @@
 ========================================================= */
 
 #supplyView .empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  margin-top: 10px;
 
-  min-height: 240px;
+  background: #fff;
 
-  padding: 30px;
-
-  text-align: center;
-
-  background: #ffffff;
-
-  border: 1px solid #e8e0d8;
-  border-radius: 18px;
+  box-shadow:
+    var(--shadow-small);
 }
 
-
-#supplyView .empty-state-icon {
-  margin-bottom: 12px;
-
-  font-size: 42px;
-}
-
-
-#supplyView .empty-state h3 {
-  margin: 0 0 6px;
-
-  font-size: 22px;
-}
-
-
-#supplyView .empty-state p {
-  margin: 0;
-
-  color: #85776e;
+#supplyView .empty-icon {
+  font-size: 46px;
 }
 
 
 /* =========================================================
-   SUPPLY MOBILE
+   TOAST
+========================================================= */
+
+.toast {
+  position: fixed;
+
+  left: 50%;
+
+  bottom: 24px;
+
+  z-index: 50;
+
+  transform:
+    translate(
+      -50%,
+      15px
+    );
+
+  padding:
+    12px
+    16px;
+
+  border-radius: 12px;
+
+  background: #26211d;
+
+  color: #fff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition:
+    .2s ease;
+
+  box-shadow:
+    var(--shadow);
+}
+
+.toast.show {
+  opacity: 1;
+
+  transform:
+    translate(
+      -50%,
+      0
+    );
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
 ========================================================= */
 
 @media (max-width: 700px) {
 
+  .app-screen {
+    padding:
+      16px
+      12px
+      50px;
+  }
+
+
+  .login-card {
+    padding:
+      26px
+      22px;
+  }
+
+
+  .login-card h1 {
+    font-size: 32px;
+  }
+
+
+  .topbar {
+    margin-bottom: 14px;
+  }
+
+
+  .brand-title {
+    font-size: 26px;
+  }
+
+
+  .main-nav {
+    gap: 7px;
+  }
+
+
+  .nav-button {
+    min-height: 48px;
+
+    font-size: 15px;
+  }
+
+
+  .toolbar {
+    margin-bottom: 22px;
+  }
+
+
+  .section-heading h2 {
+    font-size: 27px;
+  }
+
+
+  .day-header {
+    padding: 17px;
+  }
+
+
+  .day-title {
+    font-size: 19px;
+  }
+
+
+  .day-total {
+    font-size: 17px;
+  }
+
+
+  .day-content {
+    padding: 8px;
+  }
+
+
+  .slot-header {
+    padding: 14px;
+  }
+
+
+  .slot-title {
+    font-size: 17px;
+  }
+
+
+  .slot-total {
+    font-size: 15px;
+  }
+
+
+  .building-list {
+    padding: 7px;
+  }
+
+
+  .building-header {
+    padding: 13px;
+  }
+
+
+  .building-title {
+    font-size: 16px;
+  }
+
+
+  .order-card {
+    padding: 13px;
+  }
+
+
+  .order-top {
+    gap: 10px;
+  }
+
+
+  .customer-name {
+    font-size: 16px;
+  }
+
+
+  .order-price {
+    font-size: 16px;
+  }
+
+
+  .order-item {
+    font-size: 13px;
+  }
+
+
+  /* -------------------------
+     SUPPLY MOBILE
+  ------------------------- */
+
+  #supplyView .section-heading h2 {
+    font-size: 28px;
+  }
+
+
+  #supplyView .day-section {
+    border-radius: 18px;
+
+    margin-bottom: 18px;
+  }
+
+
   #supplyView .day-header {
-    padding: 18px;
+    padding:
+      17px
+      16px;
   }
 
 
@@ -267,18 +1414,25 @@
   }
 
 
-  #supplyView .day-total {
-    font-size: 17px;
+  #supplyView .day-subtitle {
+    font-size: 12px;
   }
 
 
   #supplyView .day-content {
-    padding: 8px;
+    padding: 7px;
+  }
+
+
+  #supplyView .slot-block {
+    border-radius: 15px;
   }
 
 
   #supplyView .slot-header {
-    padding: 15px;
+    padding:
+      14px
+      15px;
   }
 
 
@@ -287,31 +1441,341 @@
   }
 
 
-  .supply-product-list {
-    padding: 10px;
+  #supplyView .slot-subtitle {
+    font-size: 12px;
+  }
 
+
+  #supplyView .slot-total {
+    font-size: 15px;
+  }
+
+
+  .supply-slot-products {
+    padding: 7px;
+  }
+
+
+  .supply-product {
+    min-height: 72px;
+
+    padding:
+      14px;
+
+    gap: 12px;
+
+    border-radius: 12px;
+  }
+
+
+  .supply-product-name {
+    font-size: 15px;
+
+    line-height: 1.35;
+  }
+
+
+  .supply-product-meta {
+    font-size: 12px;
+
+    margin-top: 4px;
+  }
+
+
+  .supply-product-qty {
+    min-width: 56px;
+
+    padding:
+      7px
+      6px;
+
+    font-size: 26px;
+
+    border-radius: 10px;
+  }
+
+
+  .empty-state {
+    padding:
+      45px
+      18px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .app-screen {
+    padding:
+      13px
+      9px
+      40px;
+  }
+
+
+  .login-screen {
+    padding: 14px;
+  }
+
+
+  .login-card {
+    padding:
+      23px
+      18px;
+
+    border-radius: 20px;
+  }
+
+
+  .brand-mark {
+    width: 52px;
+    height: 52px;
+
+    font-size: 27px;
+
+    margin-bottom: 18px;
+  }
+
+
+  .login-card h1 {
+    font-size: 29px;
+  }
+
+
+  .topbar {
     gap: 8px;
   }
 
 
-  .supply-product-row {
-    min-height: 72px;
-
-    padding: 14px;
-
-    gap: 12px;
+  .brand-title {
+    font-size: 23px;
   }
 
 
-  .supply-product-row strong:first-child {
+  .brand-subtitle {
+    font-size: 12px;
+  }
+
+
+  .ghost-btn {
+    padding:
+      9px
+      12px;
+
+    font-size: 13px;
+  }
+
+
+  .nav-button {
+    min-height: 46px;
+
+    font-size: 14px;
+  }
+
+
+  .refresh-btn {
+    padding:
+      10px
+      14px;
+
+    font-size: 14px;
+  }
+
+
+  .section-heading h2 {
+    font-size: 25px;
+  }
+
+
+  .day-header {
+    padding:
+      15px
+      13px;
+  }
+
+
+  .day-title {
+    font-size: 17px;
+  }
+
+
+  .day-subtitle {
+    font-size: 11px;
+  }
+
+
+  .day-total {
+    font-size: 15px;
+  }
+
+
+  .slot-header {
+    padding:
+      13px;
+  }
+
+
+  .slot-title {
     font-size: 16px;
   }
 
 
-  .supply-product-row > strong:last-child {
+  .slot-subtitle {
+    font-size: 11px;
+  }
+
+
+  .slot-total {
+    font-size: 14px;
+  }
+
+
+  .building-header {
+    padding:
+      12px;
+  }
+
+
+  .building-title {
+    font-size: 15px;
+  }
+
+
+  .building-subtitle {
+    font-size: 11px;
+  }
+
+
+  .order-card {
+    padding:
+      12px;
+  }
+
+
+  .order-top {
+    gap: 8px;
+  }
+
+
+  .order-id {
+    font-size: 10px;
+  }
+
+
+  .customer-name {
+    font-size: 15px;
+  }
+
+
+  .customer-apartment {
+    font-size: 12px;
+  }
+
+
+  .order-price {
+    font-size: 15px;
+  }
+
+
+  .meta-pill,
+  .assignment {
+    font-size: 10px;
+
+    padding:
+      5px
+      8px;
+  }
+
+
+  .order-item {
+    font-size: 12px;
+  }
+
+
+  /* -------------------------
+     SUPPLY SMALL PHONE
+  ------------------------- */
+
+  #supplyView .day-title {
+    font-size: 17px;
+  }
+
+
+  #supplyView .slot-title {
+    font-size: 15px;
+  }
+
+
+  .supply-product {
+    min-height: 68px;
+
+    padding:
+      12px;
+
+    gap: 9px;
+  }
+
+
+  .supply-product-name {
+    font-size: 14px;
+  }
+
+
+  .supply-product-meta {
+    font-size: 11px;
+  }
+
+
+  .supply-product-qty {
     min-width: 50px;
 
-    font-size: 28px;
+    font-size: 24px;
+  }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline:
+    3px solid
+    rgba(
+      191,
+      93,
+      53,
+      .35
+    );
+
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    transition:
+      none !important;
+
+    animation:
+      none !important;
   }
 
 }
