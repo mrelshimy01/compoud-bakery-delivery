@@ -1,648 +1,317 @@
-* { box-sizing: border-box; }
+/* =========================================================
+   SUPPLY VIEW
+   Bakery pickup / preparation friendly layout
+========================================================= */
 
-:root {
-  --navy: #101827;
-  --navy-2: #172235;
-  --cream: #f7f4f1;
-  --white: #ffffff;
-  --ink: #211f1d;
-  --muted: #7d756e;
-  --line: #e6ded7;
-  --orange: #bf5d35;
-  --orange-soft: #fae9de;
-  --green: #24864d;
-  --green-soft: #e7f5eb;
-  --red: #b83a2f;
-  --red-soft: #fde9e7;
-  --shadow: 0 8px 28px rgba(33, 31, 29, .07);
+.supply-product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: #f8f5f1;
 }
 
-html, body {
-  margin: 0;
-  min-height: 100%;
-  background: var(--cream);
-  color: var(--ink);
-  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
 
-body {
-  min-height: 100vh;
-}
+/* Individual product row */
 
-button, input {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.app-shell {
-  min-height: 100vh;
-}
-
-.login-screen {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  background:
-    radial-gradient(circle at top left, #fff 0, transparent 40%),
-    var(--cream);
-}
-
-.login-card {
-  width: min(430px, 100%);
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  padding: 34px;
-  box-shadow: var(--shadow);
-}
-
-.brand-mark {
-  width: 58px;
-  height: 58px;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
-  background: #f1f0ee;
-  font-size: 30px;
-  margin-bottom: 24px;
-}
-
-.login-card h1 {
-  margin: 4px 0 8px;
-  font-size: 38px;
-  letter-spacing: -1.2px;
-}
-
-.login-card form {
-  display: grid;
-  gap: 16px;
-  margin-top: 26px;
-}
-
-label {
-  display: grid;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 750;
-}
-
-input {
-  width: 100%;
-  border: 1px solid #d9d0c9;
-  border-radius: 14px;
-  padding: 14px 15px;
-  background: #fff;
-  color: var(--ink);
-  outline: none;
-}
-
-input:focus {
-  border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(191, 93, 53, .12);
-}
-
-.primary-btn,
-.refresh-btn,
-.nav-button {
-  border: 0;
-  border-radius: 14px;
-  font-weight: 800;
-}
-
-.primary-btn {
-  padding: 14px 18px;
-  background: var(--navy);
-  color: #fff;
-}
-
-.full {
-  width: 100%;
-}
-
-.error {
-  color: var(--red);
-  font-size: 13px;
-  min-height: 18px;
-}
-
-.app-screen {
-  width: min(1280px, 100%);
-  margin: 0 auto;
-  padding: 22px 22px 70px;
-}
-
-.topbar {
+.supply-product-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 20px;
+
+  min-height: 78px;
+  padding: 16px 18px;
+
+  background: #ffffff;
+  border: 1px solid #e8e0d8;
+  border-radius: 14px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.035);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.brand-title {
-  font-size: 30px;
-  font-weight: 900;
-  letter-spacing: -1px;
+
+.supply-product-row:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.07);
 }
 
-.brand-subtitle {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 700;
+
+/* Product name */
+
+.supply-product-row > div:first-child {
+  flex: 1;
+  min-width: 0;
 }
 
-.admin-label::after {
-  content: " · Admin";
-  color: var(--orange);
-}
 
-.ghost-btn {
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--ink);
-  border-radius: 12px;
-  padding: 10px 15px;
-  font-weight: 750;
-}
+.supply-product-row strong:first-child {
+  display: block;
 
-.main-nav {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.nav-button {
-  min-height: 52px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--ink);
   font-size: 17px;
+  line-height: 1.35;
+
+  color: #24201d;
 }
 
-.nav-button.active {
-  background: var(--navy);
-  border-color: var(--navy);
-  color: #fff;
-}
 
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 28px;
-}
+/* "X orders" underneath product */
 
-.refresh-btn {
-  padding: 11px 17px;
-  background: var(--navy);
-  color: #fff;
-  font-size: 15px;
-}
-
-.updated-label {
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.loading {
-  padding: 12px 0;
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.section-heading {
-  margin-bottom: 18px;
-}
-
-.section-heading h2 {
-  margin: 2px 0 4px;
-  font-size: 30px;
-  letter-spacing: -.7px;
-}
-
-.eyebrow {
-  color: var(--orange);
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 1.8px;
-}
-
-.muted {
-  color: var(--muted);
-}
-
-.day-section {
-  overflow: hidden;
-  margin: 0 0 24px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: #fff;
-  box-shadow: var(--shadow);
-}
-
-.day-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px 24px;
-  background: var(--navy);
-  color: #fff;
-}
-
-.day-title {
-  font-size: 23px;
-  font-weight: 900;
-  letter-spacing: -.4px;
-}
-
-.day-subtitle {
+.supply-product-sub {
   margin-top: 5px;
-  color: rgba(255,255,255,.7);
+
   font-size: 13px;
-  font-weight: 650;
+  line-height: 1.3;
+
+  color: #8c7d72;
 }
 
-.day-total {
-  font-size: 21px;
-  font-weight: 900;
-  white-space: nowrap;
-}
 
-.day-content {
-  padding: 12px;
-  background: #f4f0ed;
-}
+/* Large quantity */
 
-.slot-block {
-  overflow: hidden;
-  margin-bottom: 12px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: #fff;
-}
+.supply-product-row > strong:last-child {
+  flex: 0 0 auto;
 
-.slot-block:last-child {
-  margin-bottom: 0;
-}
+  min-width: 58px;
 
-.slot-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 20px;
-  background: var(--orange-soft);
-  border-bottom: 1px solid #edd7ca;
-}
-
-.slot-title {
-  color: var(--orange);
-  font-size: 18px;
-  font-weight: 900;
-}
-
-.slot-subtitle {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 650;
-}
-
-.slot-total {
-  color: var(--orange);
-  font-weight: 900;
-  white-space: nowrap;
-}
-
-.building-list {
-  padding: 10px;
-}
-
-.building-card {
-  overflow: hidden;
-  margin-bottom: 10px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-}
-
-.building-card:last-child {
-  margin-bottom: 0;
-}
-
-.building-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 15px 16px;
-  border-bottom: 1px solid var(--line);
-}
-
-.building-title {
-  font-size: 18px;
-  font-weight: 900;
-}
-
-.building-subtitle {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.building-total {
-  font-weight: 900;
-  white-space: nowrap;
-}
-
-.building-orders {
-  padding: 8px;
-  background: #faf9f7;
-}
-
-.order-card {
-  padding: 16px;
-  margin-bottom: 8px;
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  background: #fff;
-}
-
-.order-card:last-child {
-  margin-bottom: 0;
-}
-
-.order-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-}
-
-.order-id {
-  color: #948b84;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .5px;
-}
-
-.customer-name {
-  margin-top: 3px;
-  font-size: 17px;
-  font-weight: 900;
-}
-
-.customer-apartment {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.phone {
-  display: inline-block;
-  margin-top: 7px;
-  color: var(--orange);
-  text-decoration: none;
-  font-weight: 800;
-}
-
-.order-price {
-  font-size: 18px;
-  font-weight: 900;
-  white-space: nowrap;
-}
-
-.order-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 12px;
-}
-
-.meta-pill,
-.assignment {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  padding: 6px 9px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.meta-pill {
-  background: #f3f2f0;
-  color: #665e58;
-}
-
-.assignment.assigned {
-  background: var(--green-soft);
-  color: var(--green);
-}
-
-.assignment.unassigned {
-  background: var(--red-soft);
-  color: var(--red);
-}
-
-.order-items {
-  display: grid;
-  gap: 8px;
-  margin-top: 13px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
-}
-
-.order-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-weight: 750;
-  font-size: 14px;
-}
-
-.no-items {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.empty-state {
-  padding: 60px 20px;
   text-align: center;
-  border: 1px dashed #d6cbc3;
+
+  font-size: 30px;
+  line-height: 1;
+
+  color: #c35d35;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   SUPPLY SLOT HEADER
+========================================================= */
+
+#supplyView .slot-block {
+  overflow: hidden;
+
+  margin-bottom: 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #e7ded5;
   border-radius: 18px;
-  background: rgba(255,255,255,.65);
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.045);
 }
 
-.empty-icon {
-  font-size: 42px;
-  margin-bottom: 10px;
-}
 
-.empty-state h3 {
-  margin: 0 0 6px;
-}
-
-.empty-state p {
-  margin: 0;
-  color: var(--muted);
-}
-
-/* Supply is intentionally different from Delivery:
-   Day -> Slot -> Consolidated products */
-.supply-slot-products {
-  padding: 8px;
-}
-
-.supply-product {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 18px;
-  padding: 18px 16px;
-  border-bottom: 1px solid var(--line);
-  background: #fff;
-}
-
-.supply-product:last-child {
-  border-bottom: 0;
-}
-
-.supply-product-name {
-  font-size: 17px;
-  font-weight: 850;
-}
-
-.supply-product-meta {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.supply-product-qty {
-  min-width: 72px;
-  text-align: right;
-  font-size: 28px;
-  font-weight: 950;
-  color: var(--navy);
-}
-
-.supply-summary-box {
+#supplyView .slot-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+
+  padding: 18px 20px;
+
+  background: #f9e9de;
+
+  border-bottom: 1px solid #ead9ce;
+}
+
+
+#supplyView .slot-title {
+  font-size: 20px;
+  font-weight: 800;
+
+  color: #bd5a34;
+}
+
+
+#supplyView .slot-subtitle {
+  margin-top: 4px;
+
+  font-size: 14px;
+
+  color: #806f64;
+}
+
+
+#supplyView .slot-total {
+  font-size: 20px;
+  font-weight: 800;
+
+  color: #bd5a34;
+}
+
+
+/* =========================================================
+   SUPPLY DAY HEADER
+========================================================= */
+
+#supplyView .day-section {
+  margin-bottom: 26px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background: #f1ece7;
+
+  box-shadow:
+    0 5px 18px rgba(0, 0, 0, 0.055);
+}
+
+
+#supplyView .day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 22px 24px;
+
+  background: #111b2b;
+
+  color: #ffffff;
+}
+
+
+#supplyView .day-title {
+  font-size: 23px;
+  font-weight: 800;
+
+  line-height: 1.25;
+}
+
+
+#supplyView .day-subtitle {
+  margin-top: 5px;
+
+  font-size: 14px;
+
+  color: #c7ccd4;
+}
+
+
+#supplyView .day-total {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+
+#supplyView .day-content {
+  padding: 14px;
+}
+
+
+/* =========================================================
+   SUPPLY EMPTY STATE
+========================================================= */
+
+#supplyView .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 240px;
+
+  padding: 30px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e8e0d8;
+  border-radius: 18px;
+}
+
+
+#supplyView .empty-state-icon {
   margin-bottom: 12px;
-  padding: 14px 16px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
+
+  font-size: 42px;
 }
 
-.supply-summary-box strong {
-  font-size: 16px;
+
+#supplyView .empty-state h3 {
+  margin: 0 0 6px;
+
+  font-size: 22px;
 }
 
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  z-index: 50;
-  transform: translate(-50%, 15px);
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: #26211d;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  opacity: 0;
-  pointer-events: none;
-  transition: .2s ease;
-  box-shadow: var(--shadow);
+
+#supplyView .empty-state p {
+  margin: 0;
+
+  color: #85776e;
 }
 
-.toast.show {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
+
+/* =========================================================
+   SUPPLY MOBILE
+========================================================= */
 
 @media (max-width: 700px) {
-  .app-screen {
-    padding: 16px 12px 50px;
+
+  #supplyView .day-header {
+    padding: 18px;
   }
 
-  .login-card {
-    padding: 26px 22px;
-  }
 
-  .topbar {
-    margin-bottom: 14px;
-  }
-
-  .brand-title {
-    font-size: 26px;
-  }
-
-  .nav-button {
-    min-height: 48px;
-    font-size: 15px;
-  }
-
-  .day-header {
-    padding: 17px;
-  }
-
-  .day-title {
+  #supplyView .day-title {
     font-size: 19px;
   }
 
-  .day-total {
+
+  #supplyView .day-total {
     font-size: 17px;
   }
 
-  .slot-header {
+
+  #supplyView .day-content {
+    padding: 8px;
+  }
+
+
+  #supplyView .slot-header {
+    padding: 15px;
+  }
+
+
+  #supplyView .slot-title {
+    font-size: 18px;
+  }
+
+
+  .supply-product-list {
+    padding: 10px;
+
+    gap: 8px;
+  }
+
+
+  .supply-product-row {
+    min-height: 72px;
+
     padding: 14px;
+
+    gap: 12px;
   }
 
-  .building-header {
-    padding: 13px;
-  }
 
-  .order-card {
-    padding: 13px;
-  }
-
-  .order-top {
-    gap: 10px;
-  }
-
-  .customer-name {
+  .supply-product-row strong:first-child {
     font-size: 16px;
   }
 
-  .supply-product {
-    padding: 16px 13px;
+
+  .supply-product-row > strong:last-child {
+    min-width: 50px;
+
+    font-size: 28px;
   }
 
-  .supply-product-name {
-    font-size: 15px;
-  }
-
-  .supply-product-qty {
-    font-size: 25px;
-    min-width: 58px;
-  }
 }
