@@ -2347,22 +2347,24 @@ function renderSupply() {
                                     product => `
 
                                       <div
-                                        class="supply-product-row"
+                                        class="supply-product"
                                       >
 
                                         <div>
 
-                                          <strong>
+                                          <span
+                                            class="supply-product-name"
+                                          >
 
                                             ${escapeHtml(
                                               product.product
                                             )}
 
-                                          </strong>
+                                          </span>
 
 
                                           <div
-                                            class="supply-product-sub"
+                                            class="supply-product-meta"
                                           >
 
                                             ${product.orders}
@@ -2378,14 +2380,16 @@ function renderSupply() {
                                         </div>
 
 
-                                        <strong>
+                                        <div
+                                          class="supply-product-qty"
+                                        >
 
                                           ${Number(
                                             product.quantity ||
                                             0
                                           )}
 
-                                        </strong>
+                                        </div>
 
                                       </div>
 
