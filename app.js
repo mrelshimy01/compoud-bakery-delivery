@@ -9,7 +9,7 @@
  * Supply: Day -> Slot -> consolidated product quantities.
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzscCukHSVr-zpCPfYqrL22SsumsVgcnexkOwgqIEujuCfD8q3327Y8IC-Ke-44Vw3AOQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzQ_4ELDYUd6d7tEYd0ndsDygr9gRqA0DoCHEtnuqdLHgBMQ7f54yyTfpaumDTKSm9tKQ/exec";
 
 const SESSION_KEY = "moharambake_delivery_session";
 
